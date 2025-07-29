@@ -2,7 +2,7 @@ import useFetch from '../hooks/useFetch.ts'
 import { getHello } from '../services/helloService.ts'
 
 function MainPage(){
-    const { data: greeting } = useFetch<string>(getHello);
+    const { data: greeting } = useFetch(getHello, []);
     return (
         <div>
             <h1>My First Heading</h1>
