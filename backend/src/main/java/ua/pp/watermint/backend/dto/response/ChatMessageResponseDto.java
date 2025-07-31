@@ -26,5 +26,5 @@ public class ChatMessageResponseDto {
 
     private UserResponseDto user;
 
-    private ChatContent chatContent;
+    private ChatContentResponseDto chatContent;
 }
