@@ -38,13 +38,13 @@ public class PrivateChat {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_1_id", updatable = false, nullable = false)
-    private User user1;
+    @JoinColumn(name = "user_account_1_id", updatable = false, nullable = false)
+    private UserAccount userAccount1;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_2_id", updatable = false, nullable = false)
-    private User user2;
+    @JoinColumn(name = "user_account_2_id", updatable = false, nullable = false)
+    private UserAccount userAccount2;
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)

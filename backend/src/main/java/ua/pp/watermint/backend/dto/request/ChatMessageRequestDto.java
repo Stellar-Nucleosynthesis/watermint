@@ -14,7 +14,7 @@ public class ChatMessageRequestDto {
     private String text;
 
     @NotNull
-    private UUID userId;
+    private UUID userAccountId;
 
     @NotNull
     private UUID chatId;

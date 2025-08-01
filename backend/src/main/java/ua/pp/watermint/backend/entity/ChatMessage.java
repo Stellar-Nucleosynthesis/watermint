@@ -55,8 +55,8 @@ public class ChatMessage {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id", updatable = false, nullable = false)
-    private User user;
+    @JoinColumn(name = "user_account_id", updatable = false, nullable = false)
+    private UserAccount userAccount;
 
     @NotNull
     @ManyToOne

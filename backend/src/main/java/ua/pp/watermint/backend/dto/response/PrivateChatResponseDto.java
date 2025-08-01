@@ -17,9 +17,9 @@ public class PrivateChatResponseDto {
 
     private LocalDateTime createTime;
 
-    private UserResponseDto user1;
+    private UserAccountResponseDto userAccount1;
 
-    private UserResponseDto user2;
+    private UserAccountResponseDto userAccount2;
 
     private ChatContentResponseDto chatContent;
 }

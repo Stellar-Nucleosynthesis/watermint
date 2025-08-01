@@ -34,8 +34,10 @@ class ChatMessageMapperTest {
                 && message.getCreateTime().equals(dto.getCreateTime())
                 && message.getUpdateTime().equals(dto.getUpdateTime())
                 && message.getText().equals(dto.getText())
-                && UserMapperTest.areEqual(message.getUser(), dto.getUser())
-                && ChatContentMapperTest.areEqual(message.getChatContent(), dto.getChatContent());
+                && UserAccountMapperTest.areEqual(
+                        message.getUserAccount(), dto.getUserAccount())
+                && ChatContentMapperTest.areEqual(
+                        message.getChatContent(), dto.getChatContent());
     }
 
     public static ChatMessage getExampleChatMessage() {
@@ -45,7 +47,7 @@ class ChatMessageMapperTest {
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .text("Example example example")
-                .user(UserMapperTest.getExampleUser())
+                .userAccount(UserAccountMapperTest.getExampleUserAccount())
                 .chatContent(ChatContentMapperTest.getExampleChatContent())
                 .build();
     }

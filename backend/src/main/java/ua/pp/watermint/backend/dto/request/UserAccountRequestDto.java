@@ -10,7 +10,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class UserRequestDto {
+public class UserAccountRequestDto {
     @NotBlank
     @Size(max = 254)
     @Email

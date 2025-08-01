@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ua.pp.watermint.backend.dto.response.UserResponseDto;
-import ua.pp.watermint.backend.entity.User;
+import ua.pp.watermint.backend.dto.response.UserAccountResponseDto;
+import ua.pp.watermint.backend.entity.UserAccount;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,20 +16,21 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = UserMapperImpl.class)
-class UserMapperTest {
+@ContextConfiguration(classes = UserAccountMapperImpl.class)
+class UserAccountMapperTest {
     @Autowired
-    private UserMapper userMapper;
+    private UserAccountMapper userAccountMapper;
 
     @Test
     void userToUserDtoTest() {
-        User user = getExampleUser();
-        UserResponseDto userResponseDto = userMapper.userToUserDto(user);
-        assertThat(areEqual(user, userResponseDto)).isTrue();
+        UserAccount user = getExampleUserAccount();
+        UserAccountResponseDto dto =
+                userAccountMapper.userAccountToUserAccountDto(user);
+        assertThat(areEqual(user, dto)).isTrue();
     }
 
-    public static User getExampleUser(){
-        return User.builder()
+    public static UserAccount getExampleUserAccount(){
+        return UserAccount.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .createTime(LocalDateTime.now())
@@ -44,7 +45,7 @@ class UserMapperTest {
                 .build();
     }
 
-    public static boolean areEqual(User user, UserResponseDto dto){
+    public static boolean areEqual(UserAccount user, UserAccountResponseDto dto){
         if(user == null && dto == null)
             return true;
         return user != null && dto != null

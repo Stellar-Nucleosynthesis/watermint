@@ -8,8 +8,8 @@ import java.util.UUID;
 @Data
 public class PrivateChatRequestDto {
     @NotNull
-    private UUID user_1_id;
+    private UUID userAccount1Id;
 
     @NotNull
-    private UUID user_2_id;
+    private UUID userAccount2Id;
 }

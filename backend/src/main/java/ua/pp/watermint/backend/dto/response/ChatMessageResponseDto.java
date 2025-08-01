@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.pp.watermint.backend.entity.ChatContent;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public class ChatMessageResponseDto {
 
     private String text;
 
-    private UserResponseDto user;
+    private UserAccountResponseDto userAccount;
 
     private ChatContentResponseDto chatContent;
 }

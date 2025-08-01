@@ -31,8 +31,8 @@ class PrivateChatMapperTest {
                 .id(UUID.randomUUID())
                 .version(3)
                 .createTime(LocalDateTime.now())
-                .user1(UserMapperTest.getExampleUser())
-                .user2(UserMapperTest.getExampleUser())
+                .userAccount1(UserAccountMapperTest.getExampleUserAccount())
+                .userAccount2(UserAccountMapperTest.getExampleUserAccount())
                 .chatContent(ChatContentMapperTest.getExampleChatContent())
                 .build();
     }
@@ -43,8 +43,10 @@ class PrivateChatMapperTest {
         return chat != null && dto != null
                 && chat.getId().equals(dto.getId())
                 && chat.getCreateTime().equals(dto.getCreateTime())
-                && UserMapperTest.areEqual(chat.getUser1(), dto.getUser1())
-                && UserMapperTest.areEqual(chat.getUser2(), dto.getUser2())
+                && UserAccountMapperTest.areEqual(
+                        chat.getUserAccount1(), dto.getUserAccount1())
+                && UserAccountMapperTest.areEqual(
+                        chat.getUserAccount1(), dto.getUserAccount1())
                 && ChatContentMapperTest.areEqual(
                         chat.getChatContent(), dto.getChatContent());
     }

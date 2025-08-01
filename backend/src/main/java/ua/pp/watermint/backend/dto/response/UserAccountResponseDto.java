@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDto {
+public class UserAccountResponseDto {
     private UUID id;
 
     private LocalDateTime createTime;
