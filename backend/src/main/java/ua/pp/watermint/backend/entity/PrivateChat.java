@@ -31,7 +31,6 @@ public class PrivateChat {
     @Version
     private Integer version;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createTime;

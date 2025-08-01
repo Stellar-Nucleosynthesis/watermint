@@ -7,11 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.ChatEventResponseDto;
 import ua.pp.watermint.backend.entity.ChatEvent;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import ua.pp.watermint.backend.util.DtoAssertions;
+import ua.pp.watermint.backend.util.TestFixtures;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ChatEventMapperImpl.class)
@@ -20,29 +17,9 @@ class ChatEventMapperTest {
     private ChatEventMapper chatEventMapper;
 
     @Test
-    public void chatEventToDtoTest(){
-        ChatEvent event = getExampleChatEvent();
+    void chatEventToDtoTest() {
+        ChatEvent event = TestFixtures.getExampleChatEvent();
         ChatEventResponseDto dto = chatEventMapper.chatEventToDto(event);
-        assertThat(areEqual(event, dto)).isTrue();
-    }
-
-    public static boolean areEqual(ChatEvent event, ChatEventResponseDto dto){
-        if(event == null && dto == null)
-            return true;
-        return event != null && dto != null
-                && event.getId().equals(dto.getId())
-                && event.getCreateTime().equals(dto.getCreateTime())
-                && event.getText().equals(dto.getText())
-                && ChatContentMapperTest.areEqual(event.getChatContent(), dto.getChatContent());
-    }
-
-    public static ChatEvent getExampleChatEvent() {
-        return ChatEvent.builder()
-                .id(UUID.randomUUID())
-                .version(2)
-                .createTime(LocalDateTime.now())
-                .text("Example example example")
-                .chatContent(ChatContentMapperTest.getExampleChatContent())
-                .build();
+        DtoAssertions.assertChatEventEquals(event, dto);
     }
 }

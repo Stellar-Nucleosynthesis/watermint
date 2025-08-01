@@ -34,12 +34,10 @@ public class ChatMessage {
     @Version
     private Integer version;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createTime;
 
-    @NotNull
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime updateTime;

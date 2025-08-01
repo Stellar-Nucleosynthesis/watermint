@@ -7,11 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 import ua.pp.watermint.backend.entity.PrivateChat;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import ua.pp.watermint.backend.util.DtoAssertions;
+import ua.pp.watermint.backend.util.TestFixtures;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PrivateChatMapperImpl.class)
@@ -20,34 +17,9 @@ class PrivateChatMapperTest {
     private PrivateChatMapper privateChatMapper;
 
     @Test
-    public void PrivateChatToDtoTest() {
-        PrivateChat privateChat = getExamplePrivateChat();
-        PrivateChatResponseDto dto = privateChatMapper.privateChatToDto(privateChat);
-        assertThat(areEqual(privateChat, dto)).isTrue();
-    }
-
-    private static PrivateChat getExamplePrivateChat(){
-        return PrivateChat.builder()
-                .id(UUID.randomUUID())
-                .version(3)
-                .createTime(LocalDateTime.now())
-                .userAccount1(UserAccountMapperTest.getExampleUserAccount())
-                .userAccount2(UserAccountMapperTest.getExampleUserAccount())
-                .chatContent(ChatContentMapperTest.getExampleChatContent())
-                .build();
-    }
-
-    private static boolean areEqual(PrivateChat chat, PrivateChatResponseDto dto){
-        if(chat == null && dto == null)
-            return true;
-        return chat != null && dto != null
-                && chat.getId().equals(dto.getId())
-                && chat.getCreateTime().equals(dto.getCreateTime())
-                && UserAccountMapperTest.areEqual(
-                        chat.getUserAccount1(), dto.getUserAccount1())
-                && UserAccountMapperTest.areEqual(
-                        chat.getUserAccount1(), dto.getUserAccount1())
-                && ChatContentMapperTest.areEqual(
-                        chat.getChatContent(), dto.getChatContent());
+    void privateChatToDtoTest() {
+        PrivateChat chat = TestFixtures.getExamplePrivateChat();
+        PrivateChatResponseDto dto = privateChatMapper.privateChatToDto(chat);
+        DtoAssertions.assertPrivateChatEquals(chat, dto);
     }
 }

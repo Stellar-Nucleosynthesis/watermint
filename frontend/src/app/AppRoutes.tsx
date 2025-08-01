@@ -7,6 +7,6 @@ function AppRoutes(){
             <Route path="/" element={<MainPage/>}/>
         </Routes>
     )
-}
+} 
 
 export default AppRoutes;

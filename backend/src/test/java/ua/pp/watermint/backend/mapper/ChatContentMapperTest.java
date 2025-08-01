@@ -7,10 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.ChatContentResponseDto;
 import ua.pp.watermint.backend.entity.ChatContent;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import ua.pp.watermint.backend.util.DtoAssertions;
+import ua.pp.watermint.backend.util.TestFixtures;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ChatContentMapperImpl.class)
@@ -20,22 +18,8 @@ class ChatContentMapperTest {
 
     @Test
     void chatContentToDtoTest() {
-        ChatContent chatContent = getExampleChatContent();
+        ChatContent chatContent = TestFixtures.getExampleChatContent();
         ChatContentResponseDto dto = chatContentMapper.chatContentToDto(chatContent);
-        assertThat(areEqual(chatContent, dto)).isTrue();
-    }
-
-    public static ChatContent getExampleChatContent(){
-        return ChatContent.builder()
-                .id(UUID.randomUUID())
-                .version(2)
-                .build();
-    }
-
-    public static boolean areEqual(ChatContent content, ChatContentResponseDto dto){
-        if(content == null && dto == null)
-            return true;
-        return content != null && dto != null
-                && content.getId().equals(dto.getId());
+        DtoAssertions.assertChatContentEquals(chatContent, dto);
     }
 }

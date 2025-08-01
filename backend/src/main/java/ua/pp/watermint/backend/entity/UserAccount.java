@@ -1,10 +1,7 @@
 package ua.pp.watermint.backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,12 +33,10 @@ public class UserAccount {
     @Version
     private Integer version;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createTime;
 
-    @NotNull
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime updateTime;
@@ -57,6 +52,7 @@ public class UserAccount {
     private Boolean verified;
 
     @Size(max = 24)
+    @Pattern(regexp = "^\\S.*$")
     @Column(length = 24, unique = true)
     private String username;
 
