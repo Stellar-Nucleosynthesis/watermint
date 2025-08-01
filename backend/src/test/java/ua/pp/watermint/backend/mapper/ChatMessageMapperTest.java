@@ -20,9 +20,9 @@ class ChatMessageMapperTest {
     private ChatMessageMapper chatMessageMapper;
 
     @Test
-    public void chatMessageToChatMessageDtoTest(){
+    public void chatMessageToDtoTest(){
         ChatMessage chatMessage = getExampleChatMessage();
-        ChatMessageResponseDto dto = chatMessageMapper.chatMessageToChatMessageDto(chatMessage);
+        ChatMessageResponseDto dto = chatMessageMapper.chatMessageToDto(chatMessage);
         assertThat(areEqual(chatMessage, dto)).isTrue();
     }
 

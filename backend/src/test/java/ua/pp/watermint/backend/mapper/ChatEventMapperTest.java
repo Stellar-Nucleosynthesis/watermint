@@ -20,9 +20,9 @@ class ChatEventMapperTest {
     private ChatEventMapper chatEventMapper;
 
     @Test
-    public void chatEventToChatEventDtoTest(){
+    public void chatEventToDtoTest(){
         ChatEvent event = getExampleChatEvent();
-        ChatEventResponseDto dto = chatEventMapper.chatEventToChatEventDto(event);
+        ChatEventResponseDto dto = chatEventMapper.chatEventToDto(event);
         assertThat(areEqual(event, dto)).isTrue();
     }
 

@@ -22,10 +22,10 @@ class UserAccountMapperTest {
     private UserAccountMapper userAccountMapper;
 
     @Test
-    void userToUserDtoTest() {
+    void userAccountToDtoTest() {
         UserAccount user = getExampleUserAccount();
         UserAccountResponseDto dto =
-                userAccountMapper.userAccountToUserAccountDto(user);
+                userAccountMapper.userAccountToDto(user);
         assertThat(areEqual(user, dto)).isTrue();
     }
 

@@ -6,5 +6,5 @@ import ua.pp.watermint.backend.entity.ChatEvent;
 
 @Mapper
 public interface ChatEventMapper {
-    ChatEventResponseDto chatEventToChatEventDto(ChatEvent chatEvent);
+    ChatEventResponseDto chatEventToDto(ChatEvent chatEvent);
 }

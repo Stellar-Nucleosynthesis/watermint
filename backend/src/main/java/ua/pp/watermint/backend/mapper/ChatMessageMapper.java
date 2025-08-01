@@ -6,5 +6,5 @@ import ua.pp.watermint.backend.entity.ChatMessage;
 
 @Mapper
 public interface ChatMessageMapper {
-    ChatMessageResponseDto chatMessageToChatMessageDto(ChatMessage chatMessage);
+    ChatMessageResponseDto chatMessageToDto(ChatMessage chatMessage);
 }

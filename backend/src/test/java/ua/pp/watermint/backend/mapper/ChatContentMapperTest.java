@@ -19,9 +19,9 @@ class ChatContentMapperTest {
     private ChatContentMapper chatContentMapper;
 
     @Test
-    void chatContentToChatContentDtoTest() {
+    void chatContentToDtoTest() {
         ChatContent chatContent = getExampleChatContent();
-        ChatContentResponseDto dto = chatContentMapper.chatContentToChatContentDto(chatContent);
+        ChatContentResponseDto dto = chatContentMapper.chatContentToDto(chatContent);
         assertThat(areEqual(chatContent, dto)).isTrue();
     }
 

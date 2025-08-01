@@ -20,9 +20,9 @@ class PrivateChatMapperTest {
     private PrivateChatMapper privateChatMapper;
 
     @Test
-    public void PrivateChatToPrivateChatDtoTest() {
+    public void PrivateChatToDtoTest() {
         PrivateChat privateChat = getExamplePrivateChat();
-        PrivateChatResponseDto dto = privateChatMapper.privateChatToPrivateChatDto(privateChat);
+        PrivateChatResponseDto dto = privateChatMapper.privateChatToDto(privateChat);
         assertThat(areEqual(privateChat, dto)).isTrue();
     }
 

@@ -6,5 +6,5 @@ import ua.pp.watermint.backend.entity.PrivateChat;
 
 @Mapper
 public interface PrivateChatMapper {
-    PrivateChatResponseDto privateChatToPrivateChatDto(PrivateChat privateChat);
+    PrivateChatResponseDto privateChatToDto(PrivateChat privateChat);
 }
