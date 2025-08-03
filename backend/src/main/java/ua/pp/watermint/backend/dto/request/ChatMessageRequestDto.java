@@ -17,5 +17,5 @@ public class ChatMessageRequestDto {
     private UUID userAccountId;
 
     @NotNull
-    private UUID chatId;
+    private UUID chatContentId;
 }
