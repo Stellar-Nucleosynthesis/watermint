@@ -3,12 +3,11 @@ package ua.pp.watermint.backend.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+import ua.pp.watermint.backend.dto.filter.ChatEventFilterDto;
 import ua.pp.watermint.backend.dto.request.ChatEventRequestDto;
 import ua.pp.watermint.backend.dto.response.ChatEventResponseDto;
 import ua.pp.watermint.backend.entity.ChatEvent;
@@ -96,23 +95,38 @@ class ChatEventServiceIT {
         );
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            ",2",
-            "birthday,1",
-            "swgbhsujshsy,0"
-    })
-    void search_withGivenFilter_returnsExpectedResults(
-            String text, int expectedSize) {
-        List<ChatEventResponseDto> response =
-                chatEventService.search(storedChatContentId, text);
-        assertThat(response).hasSize(expectedSize);
+    @Test
+    void search_withNoFilters_returnsAllChatEvents() {
+        ChatEventFilterDto filter = new ChatEventFilterDto();
+        filter.setChatContentId(storedChatContentId);
+        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        assertThat(response).hasSize(2);
+    }
+
+    @Test
+    void search_withTextFilter_returnsMatchingChatEvents() {
+        ChatEventFilterDto filter = new ChatEventFilterDto();
+        filter.setChatContentId(storedChatContentId);
+        filter.setText("birthday");
+        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        assertThat(response).hasSize(1);
+    }
+
+    @Test
+    void search_withInvalidTextFilter_returnsNoChatEvents() {
+        ChatEventFilterDto filter = new ChatEventFilterDto();
+        filter.setChatContentId(storedChatContentId);
+        filter.setText("veryinvalidtestext");
+        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        assertThat(response).hasSize(0);
     }
 
     @Test
     void search_withNonExistentChatContentId_throwsEntityNotFoundException() {
+        ChatEventFilterDto filter = new ChatEventFilterDto();
+        filter.setChatContentId(UUID.randomUUID());
         assertThrows(EntityNotFoundException.class, () ->
-                chatEventService.search(UUID.randomUUID(), null)
+                chatEventService.search(filter)
         );
     }
 }

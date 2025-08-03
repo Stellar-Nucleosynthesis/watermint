@@ -1,6 +1,7 @@
 package ua.pp.watermint.backend.service.impl;
 
 import org.springframework.stereotype.Service;
+import ua.pp.watermint.backend.dto.filter.PrivateChatFilterDto;
 import ua.pp.watermint.backend.dto.request.PrivateChatRequestDto;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 import ua.pp.watermint.backend.service.PrivateChatService;
@@ -16,7 +17,7 @@ public class PrivateChatServiceImpl implements PrivateChatService {
     }
 
     @Override
-    public List<PrivateChatResponseDto> search(UUID user1Id, String user2Name) {
+    public List<PrivateChatResponseDto> search(PrivateChatFilterDto filter) {
         return List.of();
     }
 

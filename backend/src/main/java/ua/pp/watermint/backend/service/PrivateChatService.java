@@ -1,5 +1,6 @@
 package ua.pp.watermint.backend.service;
 
+import ua.pp.watermint.backend.dto.filter.PrivateChatFilterDto;
 import ua.pp.watermint.backend.dto.request.PrivateChatRequestDto;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 public interface PrivateChatService {
     PrivateChatResponseDto getById(UUID id);
-    List<PrivateChatResponseDto> search(UUID user1Id, String user2Name);
+    List<PrivateChatResponseDto> search(PrivateChatFilterDto filter);
     PrivateChatResponseDto create(PrivateChatRequestDto privateChat);
     void delete(UUID id);
 }

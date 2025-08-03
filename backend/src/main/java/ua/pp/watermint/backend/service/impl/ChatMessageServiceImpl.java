@@ -1,6 +1,7 @@
 package ua.pp.watermint.backend.service.impl;
 
 import org.springframework.stereotype.Service;
+import ua.pp.watermint.backend.dto.filter.ChatMessageFilterDto;
 import ua.pp.watermint.backend.dto.request.ChatMessageRequestDto;
 import ua.pp.watermint.backend.dto.response.ChatMessageResponseDto;
 import ua.pp.watermint.backend.service.ChatMessageService;
@@ -16,7 +17,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
-    public List<ChatMessageResponseDto> search(UUID chatContentId, String text) {
+    public List<ChatMessageResponseDto> search(ChatMessageFilterDto filter) {
         return List.of();
     }
 
