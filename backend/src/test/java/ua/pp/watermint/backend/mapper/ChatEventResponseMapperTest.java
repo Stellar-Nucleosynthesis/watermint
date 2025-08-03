@@ -7,19 +7,21 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.ChatEventResponseDto;
 import ua.pp.watermint.backend.entity.ChatEvent;
+import ua.pp.watermint.backend.mapper.response.ChatEventResponseMapper;
+import ua.pp.watermint.backend.mapper.response.ChatEventResponseMapperImpl;
 import ua.pp.watermint.backend.util.DtoAssertions;
 import ua.pp.watermint.backend.util.TestFixtures;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ChatEventMapperImpl.class)
-class ChatEventMapperTest {
+@ContextConfiguration(classes = ChatEventResponseMapperImpl.class)
+class ChatEventResponseMapperTest {
     @Autowired
-    private ChatEventMapper chatEventMapper;
+    private ChatEventResponseMapper chatEventResponseMapper;
 
     @Test
     void chatEventToDtoTest() {
         ChatEvent event = TestFixtures.getExampleChatEvent();
-        ChatEventResponseDto dto = chatEventMapper.chatEventToDto(event);
+        ChatEventResponseDto dto = chatEventResponseMapper.chatEventToDto(event);
         DtoAssertions.assertChatEventEquals(event, dto);
     }
 }

@@ -7,19 +7,21 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 import ua.pp.watermint.backend.entity.PrivateChat;
+import ua.pp.watermint.backend.mapper.response.PrivateChatResponseMapper;
+import ua.pp.watermint.backend.mapper.response.PrivateChatResponseMapperImpl;
 import ua.pp.watermint.backend.util.DtoAssertions;
 import ua.pp.watermint.backend.util.TestFixtures;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = PrivateChatMapperImpl.class)
-class PrivateChatMapperTest {
+@ContextConfiguration(classes = PrivateChatResponseMapperImpl.class)
+class PrivateChatResponseMapperTest {
     @Autowired
-    private PrivateChatMapper privateChatMapper;
+    private PrivateChatResponseMapper privateChatResponseMapper;
 
     @Test
     void privateChatToDtoTest() {
         PrivateChat chat = TestFixtures.getExamplePrivateChat();
-        PrivateChatResponseDto dto = privateChatMapper.privateChatToDto(chat);
+        PrivateChatResponseDto dto = privateChatResponseMapper.privateChatToDto(chat);
         DtoAssertions.assertPrivateChatEquals(chat, dto);
     }
 }

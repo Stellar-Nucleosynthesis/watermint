@@ -1,6 +1,7 @@
 package ua.pp.watermint.backend.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,14 +86,15 @@ class ChatEventServiceIT {
 
     @Test
     void create_withEmptyTextField_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () ->
-                chatEventService.create(
-                        ChatEventRequestDto.builder()
-                                .text("")
-                                .chatContentId(storedChatContentId)
-                                .build()
-                )
-        );
+        assertThrows(ConstraintViolationException.class, () -> {
+                    chatEventService.create(
+                            ChatEventRequestDto.builder()
+                                    .text("")
+                                    .chatContentId(storedChatContentId)
+                                    .build()
+                    );
+                    chatEventRepository.flush();
+        });
     }
 
     @Test
