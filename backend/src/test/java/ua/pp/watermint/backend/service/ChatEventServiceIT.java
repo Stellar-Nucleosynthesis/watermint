@@ -87,13 +87,13 @@ class ChatEventServiceIT {
     @Test
     void create_withEmptyTextField_throwsIllegalArgumentException() {
         assertThrows(ConstraintViolationException.class, () -> {
-                    chatEventService.create(
-                            ChatEventRequestDto.builder()
-                                    .text("")
-                                    .chatContentId(storedChatContentId)
-                                    .build()
-                    );
-                    chatEventRepository.flush();
+            chatEventService.create(
+                    ChatEventRequestDto.builder()
+                            .text("")
+                            .chatContentId(storedChatContentId)
+                            .build()
+            );
+            chatEventRepository.flush();
         });
     }
 
