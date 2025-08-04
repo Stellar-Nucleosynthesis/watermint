@@ -1,6 +1,7 @@
 package ua.pp.watermint.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,4 +50,9 @@ public class PrivateChat {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "chat_content_id", updatable = false, nullable = false)
     private ChatContent chatContent;
+
+    @AssertTrue(message = "Users in a chat must be different")
+    public boolean isDifferentUsers() {
+        return userAccount1 != null && userAccount2 != null && !userAccount1.equals(userAccount2);
+    }
 }
