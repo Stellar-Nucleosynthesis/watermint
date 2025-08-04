@@ -1,4 +1,4 @@
-package ua.pp.watermint.backend.mapper;
+package ua.pp.watermint.backend.mapper.response;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,8 +7,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.pp.watermint.backend.dto.response.ChatContentResponseDto;
 import ua.pp.watermint.backend.entity.ChatContent;
-import ua.pp.watermint.backend.mapper.response.ChatContentResponseMapper;
-import ua.pp.watermint.backend.mapper.response.ChatContentResponseMapperImpl;
 import ua.pp.watermint.backend.util.DtoAssertions;
 import ua.pp.watermint.backend.util.TestFixtures;
 
