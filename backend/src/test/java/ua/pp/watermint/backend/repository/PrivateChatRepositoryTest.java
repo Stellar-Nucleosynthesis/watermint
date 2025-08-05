@@ -139,6 +139,20 @@ public class PrivateChatRepositoryTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void addPrivateChatWithSimilarUsersTest(){
+        assertThrows(ConstraintViolationException.class, () ->
+                privateChatRepository.saveAndFlush(
+                        PrivateChat.builder()
+                                .userAccount1(storedUserAccount1)
+                                .userAccount2(storedUserAccount1)
+                                .chatContent(new ChatContent())
+                                .build()
+                )
+        );
+    }
+
+    @Test
     public void deletePrivateChatTest(){
         privateChatRepository.deleteById(storedPrivateChat.getId());
         assertThat(privateChatRepository.count()).isZero();

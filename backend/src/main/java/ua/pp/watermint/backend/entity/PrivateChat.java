@@ -1,15 +1,14 @@
 package ua.pp.watermint.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
@@ -39,11 +38,13 @@ public class PrivateChat {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_account_1_id", updatable = false, nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserAccount userAccount1;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_account_2_id", updatable = false, nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserAccount userAccount2;
 
     @NotNull

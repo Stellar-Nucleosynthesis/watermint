@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
@@ -45,5 +43,6 @@ public class ChatEvent {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "chat_content_id", updatable = false, nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ChatContent chatContent;
 }

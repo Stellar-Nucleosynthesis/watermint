@@ -30,14 +30,14 @@ public class TestDatabaseInitializer implements CommandLineRunner {
                         .verified(true)
                         .username("user1")
                         .password("password")
-                        .name("name")
+                        .name("first name")
                         .build(),
                 UserAccount.builder()
                         .email("user2@example.com")
                         .verified(true)
                         .username("user2")
                         .password("password")
-                        .name("name")
+                        .name("second name")
                         .build()
         ));
     }

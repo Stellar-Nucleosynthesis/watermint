@@ -152,6 +152,17 @@ public class ChatMessageServiceIT {
     }
 
     @Test
+    void update_withNonExistentId_throwsEntityNotFoundException() {
+        ChatMessageRequestDto request = ChatMessageRequestDto.builder()
+                .text("Some text")
+                .build();
+        assertThrows(EntityNotFoundException.class, () -> {
+            chatMessageService.update(UUID.randomUUID(), request);
+            chatMessageRepository.flush();
+        });
+    }
+
+    @Test
     void search_withNoFilters_returnsAllChatMessages() {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(storedChatContentId);
