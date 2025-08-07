@@ -101,17 +101,19 @@ public class UserAccountServiceIT {
 
     @ParameterizedTest
     @CsvSource({
-            ",super_password,User Name",
-            "super_email@example.com,,User Name",
-            "super_email@example.com,super_password,"
+            ",super_username,super_password,User Name",
+            "super_email@example.com,,super_password,User Name",
+            "super_email@example.com,super_username,,User Name",
+            "super_email@example.com,super_username,super_password,"
     })
     void create_withGivenInput_throwsConstraintViolationException(
-            String email, String password, String name
+            String email, String username, String password, String name
     ) {
         assertThrows(ConstraintViolationException.class, () -> {
             userAccountService.create(
                     UserAccountRequestDto.builder()
                             .email(email)
+                            .username(username)
                             .password(password)
                             .name(name)
                             .build()
@@ -183,18 +185,20 @@ public class UserAccountServiceIT {
 
     @ParameterizedTest
     @CsvSource({
-            "'',super_password,User Name",
-            "super_email@example.com,'',User Name",
-            "super_email@example.com,super_password,''"
+            "'',super_username,super_password,User Name",
+            "super_email@example.com,'',super_password,User Name",
+            "super_email@example.com,super_username,'',User Name",
+            "super_email@example.com,super_username,super_password,''"
     })
     void update_withGivenInput_throwsConstraintViolationException(
-            String email, String password, String name
+            String email, String username, String password, String name
     ) {
         UUID id = userAccountRepository.findAll().getFirst().getId();
         assertThrows(ConstraintViolationException.class, () -> {
             userAccountService.update(id,
                     UserAccountRequestDto.builder()
                             .email(email)
+                            .username(username)
                             .password(password)
                             .name(name)
                             .build()

@@ -42,6 +42,7 @@ public class ChatMessageRepositoryTest {
                 UserAccount.builder()
                         .email("email@example.com")
                         .verified(true)
+                        .username("username")
                         .password("password")
                         .name("name")
                         .build()

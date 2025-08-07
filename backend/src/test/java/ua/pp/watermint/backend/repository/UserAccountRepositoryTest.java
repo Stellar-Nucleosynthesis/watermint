@@ -63,6 +63,7 @@ public class UserAccountRepositoryTest {
                 UserAccount.builder()
                         .email("another_email@example.com")
                         .verified(false)
+                        .username("another_username")
                         .password("password")
                         .name("name")
                         .build()
@@ -86,6 +87,7 @@ public class UserAccountRepositoryTest {
                         UserAccount.builder()
                                 .email("email@example.com")
                                 .verified(false)
+                                .username("new_username")
                                 .password("password")
                                 .name("name")
                                 .build()
@@ -127,12 +129,13 @@ public class UserAccountRepositoryTest {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    public void addUserAccountWithEmptyFieldTest(){
+    public void addUserAccountWithEmptyPasswordTest(){
         assertThrows(ConstraintViolationException.class, () ->
                 userAccountRepository.saveAndFlush(
                         UserAccount.builder()
                                 .email("another_email@example.com")
                                 .verified(false)
+                                .username("new_username")
                                 .password("")
                                 .name("name")
                                 .build()

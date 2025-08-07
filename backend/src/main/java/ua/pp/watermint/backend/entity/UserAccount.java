@@ -51,9 +51,10 @@ public class UserAccount {
     @Column(nullable = false)
     private Boolean verified;
 
+    @NotBlank
     @Size(max = 24)
     @Pattern(regexp = "^\\S.*$")
-    @Column(length = 24, unique = true)
+    @Column(nullable = false, length = 24, unique = true)
     private String username;
 
     @NotBlank
