@@ -21,6 +21,7 @@ public class UserAccountRequestDto {
     @Email
     private String email;
 
+    @NotBlank
     @Size(max = 24)
     private String username;
 
