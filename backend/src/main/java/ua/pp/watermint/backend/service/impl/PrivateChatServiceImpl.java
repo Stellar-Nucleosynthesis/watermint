@@ -16,6 +16,7 @@ import ua.pp.watermint.backend.mapper.request.PrivateChatRequestMapper;
 import ua.pp.watermint.backend.mapper.response.PrivateChatResponseMapper;
 import ua.pp.watermint.backend.repository.PrivateChatRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
+import ua.pp.watermint.backend.security.service.AuthorizationService;
 import ua.pp.watermint.backend.service.PrivateChatService;
 
 import java.util.List;
@@ -25,25 +26,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PrivateChatServiceImpl implements PrivateChatService {
     private final PrivateChatRepository privateChatRepository;
-
     private final UserAccountRepository userAccountRepository;
-
     private final PrivateChatRequestMapper privateChatRequestMapper;
-
     private final PrivateChatResponseMapper privateChatResponseMapper;
+    private final AuthorizationService authorizationService;
 
     @Override
     public PrivateChatResponseDto getById(UUID id) {
-        return privateChatRepository.findById(id)
-                .map(privateChatResponseMapper::privateChatToDto).orElseThrow(() ->
-                        new EntityNotFoundException("Private chat with id " + id + " not found!"));
+        PrivateChat chat = privateChatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Private chat with id " + id + " not found!"));
+        authorizationService.checkAnyAuthorized(chat.getUserAccount1(), chat.getUserAccount2());
+        return privateChatResponseMapper.privateChatToDto(chat);
     }
 
     @Override
     public List<PrivateChatResponseDto> search(PrivateChatFilterDto filter) {
         UUID userId = filter.getUserAccount1Id();
-        if(!userAccountRepository.existsById(userId))
-            throw new EntityNotFoundException("User account with id " + userId + " not found!");
+        UserAccount account = userAccountRepository.findById(userId).orElseThrow(() ->
+                new EntityNotFoundException("User with id " + userId + " not found!"));
+        authorizationService.checkAuthorized(account);
         String otherName = filter.getUserAccount2Name();
 
         Specification<PrivateChat> caseA = (root, query, cb) -> {
@@ -82,21 +83,27 @@ public class PrivateChatServiceImpl implements PrivateChatService {
     }
 
     @Override
-    public PrivateChatResponseDto create(PrivateChatRequestDto privateChat) {
-        UUID user1Id = privateChat.getUserAccount1Id();
-        UUID user2Id = privateChat.getUserAccount2Id();
+    public PrivateChatResponseDto create(PrivateChatRequestDto dto) {
+        UUID user1Id = dto.getUserAccount1Id();
+        UserAccount user1 = userAccountRepository.findById(user1Id).orElseThrow(() ->
+                new EntityNotFoundException("User with id " + user1Id + " not found!"));
+        UUID user2Id = dto.getUserAccount2Id();
+        UserAccount user2 = userAccountRepository.findById(user2Id).orElseThrow(() ->
+                new EntityNotFoundException("User with id " + user2Id + " not found!"));
+        authorizationService.checkAnyAuthorized(user1, user2);
         if(privateChatRepository.existsByUserAccount1_IdAndUserAccount2_Id(user1Id, user2Id)
                 || privateChatRepository.existsByUserAccount1_IdAndUserAccount2_Id(user2Id, user1Id)){
             throw new EntityExistsException("Private chat between users already exists");
         }
         return privateChatResponseMapper.privateChatToDto(
-                privateChatRepository.save(privateChatRequestMapper.dtoToPrivateChat(privateChat)));
+                privateChatRepository.save(privateChatRequestMapper.dtoToPrivateChat(dto)));
     }
 
     @Override
     public void delete(UUID id) {
-        if(!privateChatRepository.existsById(id))
-            throw new EntityNotFoundException("Private chat with id " + id + " not found!");
+        PrivateChat chat = privateChatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Private chat with id " + id + " not found!"));
+        authorizationService.checkAnyAuthorized(chat.getUserAccount1(), chat.getUserAccount2());
         privateChatRepository.deleteById(id);
     }
 }

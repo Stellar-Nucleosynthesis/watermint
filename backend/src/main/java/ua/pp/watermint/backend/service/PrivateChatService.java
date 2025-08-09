@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface PrivateChatService {
     PrivateChatResponseDto getById(UUID id);
     List<PrivateChatResponseDto> search(PrivateChatFilterDto filter);
-    PrivateChatResponseDto create(PrivateChatRequestDto privateChat);
+    PrivateChatResponseDto create(PrivateChatRequestDto dto);
     void delete(UUID id);
 }

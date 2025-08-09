@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface ChatEventService {
     ChatEventResponseDto getById(UUID id);
-    ChatEventResponseDto create(ChatEventRequestDto chatEvent);
+    ChatEventResponseDto create(ChatEventRequestDto dto);
     List<ChatEventResponseDto> search(ChatEventFilterDto filter);
 }

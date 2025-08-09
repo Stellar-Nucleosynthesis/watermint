@@ -13,7 +13,6 @@ import java.util.UUID;
 public class ChatContentAccessRegistryImpl implements ChatContentAccessRegistry {
     private final List<ChatContentAccessService> chatContentAccessServices;
 
-
     @Override
     public boolean hasAccess(UUID userId, UUID chatContentId) {
         return chatContentAccessServices.stream()

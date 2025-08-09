@@ -21,11 +21,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatEventServiceImpl implements ChatEventService {
     private final ChatEventRepository chatEventRepository;
-
     private final ChatContentRepository chatContentRepository;
-
     private final ChatEventResponseMapper chatEventResponseMapper;
-
     private final ChatEventRequestMapper chatEventRequestMapper;
 
     @Override
@@ -35,9 +32,9 @@ public class ChatEventServiceImpl implements ChatEventService {
     }
 
     @Override
-    public ChatEventResponseDto create(ChatEventRequestDto chatEvent) {
+    public ChatEventResponseDto create(ChatEventRequestDto dto) {
         return chatEventResponseMapper.chatEventToDto(
-                chatEventRepository.save(chatEventRequestMapper.dtoToChatEvent(chatEvent)));
+                chatEventRepository.save(chatEventRequestMapper.dtoToChatEvent(dto)));
     }
 
     @Override

@@ -3,16 +3,20 @@ package ua.pp.watermint.backend.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import ua.pp.watermint.backend.dto.filter.ChatMessageFilterDto;
 import ua.pp.watermint.backend.dto.request.ChatMessageRequestDto;
 import ua.pp.watermint.backend.dto.response.ChatMessageResponseDto;
 import ua.pp.watermint.backend.entity.ChatMessage;
+import ua.pp.watermint.backend.entity.UserAccount;
 import ua.pp.watermint.backend.mapper.request.ChatMessageRequestMapper;
 import ua.pp.watermint.backend.mapper.response.ChatMessageResponseMapper;
 import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.ChatMessageRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
+import ua.pp.watermint.backend.security.service.AuthorizationService;
+import ua.pp.watermint.backend.service.ChatContentAccessRegistry;
 import ua.pp.watermint.backend.service.ChatMessageService;
 
 import java.util.List;
@@ -22,19 +26,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
-
     private final UserAccountRepository userAccountRepository;
-
     private final ChatContentRepository chatContentRepository;
-
     private final ChatMessageRequestMapper chatMessageRequestMapper;
-
     private final ChatMessageResponseMapper chatMessageResponseMapper;
+    private final AuthorizationService authorizationService;
+    private final ChatContentAccessRegistry accessRegistry;
 
     @Override
     public ChatMessageResponseDto getById(UUID id) {
-        return chatMessageRepository.findById(id).map(chatMessageResponseMapper::chatMessageToDto)
-                .orElseThrow(() -> new EntityNotFoundException("Chat message with id " + id + " not found!"));
+        ChatMessage message = chatMessageRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Chat message with id " + id + " not found!"));
+        checkChatContentAccess(message.getChatContent().getId());
+        return chatMessageResponseMapper.chatMessageToDto(message);
     }
 
     @Override
@@ -42,6 +46,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         UUID contentId = filter.getChatContentId();
         if(!chatContentRepository.existsById(contentId))
             throw new EntityNotFoundException("Chat content with id " + contentId + " not found!");
+        checkChatContentAccess(contentId);
         UUID userId = filter.getUserAccountId();
         if(userId != null && !userAccountRepository.existsById(userId))
             throw new EntityNotFoundException("User account with id " + userId + " not found!");
@@ -70,24 +75,42 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
-    public ChatMessageResponseDto create(ChatMessageRequestDto chatMessage) {
+    public ChatMessageResponseDto create(ChatMessageRequestDto dto) {
+        checkChatContentAccess(dto.getChatContentId());
+        UserAccount currentUser = authorizationService.getCurrentUser();
+        if(!dto.getUserAccountId().equals(currentUser.getId()))
+            throw new AccessDeniedException("Access denied: tried to save a message as another account!");
         return chatMessageResponseMapper.chatMessageToDto(
-                chatMessageRepository.save(chatMessageRequestMapper.dtoToChatMessage(chatMessage)));
+                chatMessageRepository.save(chatMessageRequestMapper.dtoToChatMessage(dto)));
     }
 
     @Override
-    public ChatMessageResponseDto update(UUID id, ChatMessageRequestDto chatMessage) {
+    public ChatMessageResponseDto update(UUID id, ChatMessageRequestDto dto) {
         ChatMessage message = chatMessageRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Chat message with id " + id + " not found!"));
-        message.setText(chatMessage.getText());
+        checkChatContentAccess(message.getChatContent().getId());
+        UserAccount currentUser = authorizationService.getCurrentUser();
+        if(!message.getUserAccount().equals(currentUser))
+            throw new AccessDeniedException("Access denied: tried to update a message as another account!");
+        message.setText(dto.getText());
         message.setWasUpdated(true);
         return chatMessageResponseMapper.chatMessageToDto(chatMessageRepository.saveAndFlush(message));
     }
 
     @Override
     public void delete(UUID id) {
-        if(!chatMessageRepository.existsById(id))
-            throw new EntityNotFoundException("Chat message with id " + id + " not found!");
+        ChatMessage message = chatMessageRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Chat message with id " + id + " not found!"));
+        checkChatContentAccess(message.getChatContent().getId());
+        UserAccount currentUser = authorizationService.getCurrentUser();
+        if(!message.getUserAccount().equals(currentUser))
+            throw new AccessDeniedException("Access denied: tried to delete a message as another account!");
         chatMessageRepository.deleteById(id);
+    }
+
+    private void checkChatContentAccess(UUID chatContentId){
+        UserAccount currentUser = authorizationService.getCurrentUser();
+        if(!accessRegistry.hasAccess(currentUser.getId(), chatContentId))
+            throw new AccessDeniedException("User " + currentUser.getUsername() + " has no access to the chat!");
     }
 }
