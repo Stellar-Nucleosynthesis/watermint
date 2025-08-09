@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface PrivateChatRepository extends JpaRepository<PrivateChat, UUID>, JpaSpecificationExecutor<PrivateChat> {
     boolean existsByUserAccount1_IdAndUserAccount2_Id(UUID user1Id, UUID user2Id);
+    boolean existsByUserAccount1_IdAndChatContent_Id(UUID user1Id, UUID chatContentId);
+    boolean existsByUserAccount2_IdAndChatContent_Id(UUID user2Id, UUID chatContentId);
 }
