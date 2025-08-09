@@ -15,7 +15,6 @@ public class DtoAssertions {
         assertThat(dto.getEmail()).isEqualTo(user.getEmail());
         assertThat(dto.getVerified()).isEqualTo(user.getVerified());
         assertThat(dto.getUsername()).isEqualTo(user.getUsername());
-        assertThat(dto.getPassword()).isEqualTo(user.getPassword());
         assertThat(dto.getName()).isEqualTo(user.getName());
         assertThat(dto.getBirthDate()).isEqualTo(user.getBirthDate());
         assertThat(dto.getProfilePicture()).isEqualTo(user.getProfilePicture());

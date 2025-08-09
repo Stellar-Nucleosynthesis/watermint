@@ -92,7 +92,6 @@ public class UserAccountServiceIT {
         assertThat(saved.getEmail()).isEqualTo(dto.getEmail());
         assertThat(saved.getVerified()).isFalse();
         assertThat(saved.getUsername()).isEqualTo(dto.getUsername());
-        assertThat(saved.getPassword()).isEqualTo(dto.getPassword());
         assertThat(saved.getName()).isEqualTo(dto.getName());
         assertThat(saved.getBirthDate()).isEqualTo(dto.getBirthDate());
         assertThat(saved.getProfilePicture()).isEqualTo(dto.getProfilePicture());
@@ -161,7 +160,6 @@ public class UserAccountServiceIT {
         assertThat(updated.getEmail()).isEqualTo(initial.getEmail());
         assertThat(updated.getVerified()).isFalse();
         assertThat(updated.getUsername()).isEqualTo(initial.getUsername());
-        assertThat(updated.getPassword()).isEqualTo(initial.getPassword());
         assertThat(updated.getName()).isEqualTo(initial.getName());
         assertThat(updated.getBirthDate()).isEqualTo(initial.getBirthDate());
         assertThat(updated.getProfilePicture()).isEqualTo(initial.getProfilePicture());

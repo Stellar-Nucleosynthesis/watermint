@@ -26,8 +26,4 @@ public class UserAccountDetails implements UserDetails {
     public String getUsername() {
         return account.getUsername();
     }
-
-    public boolean isVerified() {
-        return account.getVerified();
-    }
 }

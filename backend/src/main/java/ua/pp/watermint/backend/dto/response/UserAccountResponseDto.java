@@ -26,8 +26,6 @@ public class UserAccountResponseDto {
 
     private String username;
 
-    private String password;
-
     private String name;
 
     private LocalDate birthDate;

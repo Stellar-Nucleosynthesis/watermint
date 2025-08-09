@@ -43,8 +43,7 @@ public class JwtTokenProvider {
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts
-                .parserBuilder()
+        return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
@@ -54,7 +53,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try{
-            Jwts.parserBuilder().build().parse(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException | MalformedJwtException
                  | SignatureException | IllegalArgumentException e){
