@@ -1,15 +1,12 @@
-import useFetch from '../hooks/useFetch.ts'
-import { getHello } from '../services/helloService.ts'
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-function MainPage(){
-    const { data: greeting } = useFetch(getHello, []);
-    return (
-        <div>
-            <h1>My First Heading</h1>
-            <p>My first paragraph.</p>
-            <p>Greeting: {greeting}</p>
-        </div>
-    );
+function MainPage() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        navigate('/signup');
+    }, [navigate]);
+    return (<></>);
 }
 
 export default MainPage;
