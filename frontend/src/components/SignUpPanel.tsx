@@ -2,7 +2,7 @@ import { Button, Paper, PasswordInput, Text, TextInput, Title, Stack, Checkbox, 
 import { IconAt, IconCheck } from '@tabler/icons-react';
 import { useState } from "react";
 import type { UserAccountRequestDto } from "../models/UserAccount";
-import { createUserAccount } from "../services/UserAccountService";
+import { createUserAccount } from "../services/userAccountService";
 import { useNavigate } from "react-router-dom";
 import { notifications } from '@mantine/notifications';
 

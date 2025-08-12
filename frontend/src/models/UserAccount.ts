@@ -8,7 +8,7 @@ export interface UserAccount {
     name: string;
     birthDate?: string;
     profilePicture?: Uint8Array;
-}
+};
 
 export interface UserAccountRequestDto {
     email: string;
@@ -17,4 +17,4 @@ export interface UserAccountRequestDto {
     name: string;
     birthDate?: string;
     profilePicture?: Uint8Array;
-}
+};
