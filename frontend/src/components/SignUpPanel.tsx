@@ -5,6 +5,8 @@ import type { UserAccountRequestDto } from "../models/UserAccount";
 import { createUserAccount } from "../services/userAccountService";
 import { useNavigate } from "react-router-dom";
 import { notifications } from '@mantine/notifications';
+import { validateEmail, validateName, validateUsername, 
+    validatePassword, validatePasswordConfirm, validateAgreement } from "../validators/userAccountValidator";
 
 type SignUpPanelProps = {
     w: string;
@@ -184,39 +186,3 @@ function SignUpPanel({ w }: SignUpPanelProps) {
 }
 
 export default SignUpPanel;
-
-const validateEmail = (value: string) => {
-    if (!value) return "Email is required";
-    if (value.length > 254) return "Email must be at most 254 characters";
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) return "Invalid email format";
-    return null;
-};
-
-const validateName = (value: string) => {
-    if (!value) return "Name is required";
-    if (value.length > 100) return "Name must be at most 100 characters";
-    return null;
-};
-
-const validateUsername = (value: string) => {
-    if (!value) return "Username is required";
-    if (value.length > 24) return "Username must be at most 24 characters";
-    return null;
-};
-
-const validatePassword = (value: string) => {
-    if (!value) return "Password is required";
-    return null;
-};
-
-const validatePasswordConfirm = (value: string, pass: string) => {
-    if (!value) return "Please confirm your password";
-    if (value !== pass) return "Passwords do not match";
-    return null;
-};
-
-const validateAgreement = (checked: boolean) => {
-    if (!checked) return "You must agree to the terms and conditions";
-    return null;
-};

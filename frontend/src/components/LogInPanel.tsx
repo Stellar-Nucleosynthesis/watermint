@@ -6,6 +6,7 @@ import { notifications } from '@mantine/notifications';
 import type { AuthRequestDto, AuthResponseDto } from "../models/AuthDto";
 import { logIn } from "../services/authService";
 import { useAuthStore } from "../stores/authStore";
+import { validateUsername, validatePassword } from "../validators/userAccountValidator";
 
 type SignUpPanelProps = {
     w: string;
@@ -118,14 +119,3 @@ function LogInPanel({ w }: SignUpPanelProps) {
 }
 
 export default LogInPanel;
-
-const validateUsername = (value: string) => {
-    if (!value) return "Username is required";
-    if (value.length > 24) return "Username must be at most 24 characters";
-    return null;
-};
-
-const validatePassword = (value: string) => {
-    if (!value) return "Password is required";
-    return null;
-};
