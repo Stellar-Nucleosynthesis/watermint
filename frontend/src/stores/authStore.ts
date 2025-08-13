@@ -1,11 +1,13 @@
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect, useRef } from "react";
+import { useUserAccountStore } from "./userAccountStore";
 
 const tokenKey = "jwt_watermint";
 
 interface AuthStore{
     token: string | null,
     setToken: (token: string) => void,
+    loadingAuth: boolean,
     isAuthenticated: boolean,
     currentUsername: string | null
 }
@@ -48,7 +50,7 @@ function getTimeToExpiration(token: string | null): number | null {
     }
 }
 
-function getValidToken(): string | null {
+export function getValidToken(): string | null {
     const storedToken = localStorage.getItem(tokenKey);
     return isValid(storedToken) ? storedToken : null;
 }
@@ -63,7 +65,10 @@ function deleteToken() {
 }
 
 export function useAuthStore(): AuthStore {
+    const { fetchByUsername, clearUserAccount } = useUserAccountStore();
+
     const [token, setTokenState] = useState<string | null>(null);
+    const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [currentUsername, setCurrentUsername] = useState<string | null>(null);
     const expirationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -73,9 +78,15 @@ export function useAuthStore(): AuthStore {
             clearTimeout(expirationTimerRef.current);
             expirationTimerRef.current = null;
         }
+
+        const usernameFromToken = getUsernameFromToken(token);
         setTokenState(token);
         setIsAuthenticated(token != null);
-        setCurrentUsername(getUsernameFromToken(token));
+        setCurrentUsername(usernameFromToken);
+        if(usernameFromToken)
+            fetchByUsername(usernameFromToken);
+        else
+            clearUserAccount();
 
         const msToExpiration = getTimeToExpiration(token);
         if (msToExpiration != null && msToExpiration > 0) {
@@ -93,8 +104,10 @@ export function useAuthStore(): AuthStore {
 
     useEffect(() => {
         const syncToken = () => {
+            setLoadingAuth(true);
             const latest = getValidToken();
             updateStateFromToken(latest);
+            setLoadingAuth(false);
         };
 
         syncToken();
@@ -106,5 +119,5 @@ export function useAuthStore(): AuthStore {
         }
     }, []);
 
-    return {token, setToken, isAuthenticated, currentUsername};
+    return {token, setToken, loadingAuth, isAuthenticated, currentUsername};
 }

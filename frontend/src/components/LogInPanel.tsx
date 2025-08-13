@@ -104,9 +104,12 @@ function LogInPanel({ w }: SignUpPanelProps) {
                     onClick={handleSubmit}>
                     Log In
                 </Button>
-                <Text size="sm" fw={500} c="red">
-                    {error?.message}
-                </Text>
+                {
+                    error &&
+                    <Text size="sm" fw={500} c="red">
+                        {error?.message}
+                    </Text>
+                }
                 <Group gap="xs">
                     <Text size="sm" c="grey">Don't have an account?</Text>
                     <Anchor size="sm" href="/signup" target="_self" underline="hover">
