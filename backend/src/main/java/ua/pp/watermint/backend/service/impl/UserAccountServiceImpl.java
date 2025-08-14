@@ -28,7 +28,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccountResponseDto getById(UUID id) {
         UserAccount account = userAccountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User account with id " + id + " not found!"));
-        checkAuthorization(account);
         return userAccountResponseMapper.userAccountToDto(account);
     }
 
@@ -36,7 +35,6 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccountResponseDto getByUsername(String username) {
         UserAccount account = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User account with username " + username + " not found!"));
-        checkAuthorization(account);
         return userAccountResponseMapper.userAccountToDto(account);
     }
 
