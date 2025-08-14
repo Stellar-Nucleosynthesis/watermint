@@ -65,7 +65,7 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
                 icon: <IconCheck size={20} />,
                 withCloseButton: false
             });
-            onClose();
+            handleClose();
         } catch (e: unknown) {
             if (e instanceof Error) {
                 setChatCreationError(e);
@@ -77,12 +77,19 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
         }
     };
 
+    const handleClose = () => {
+        setUsername("");
+        setUsernameError(null);
+        setChatCreationError(null);
+        onClose();
+    }
+
     const validAccountSelected = selectedUser && selectedUser.id != userAccount.id;
 
     return (
         <Modal
             opened={opened}
-            onClose={onClose}
+            onClose={handleClose}
             shadow="sm"
             title={<Title order={3} c="grey">Find by username</Title>}
             size="auto"

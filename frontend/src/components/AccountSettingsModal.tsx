@@ -110,10 +110,22 @@ function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModa
         }
     };
 
+    const handleClose = () => {
+        setEmail(userAccount.email);
+        setName(userAccount.name);
+        setProfilePicture(userAccount.profilePicture);
+        setBirthDate(userAccount.birthDate);
+        setEmailError(null);
+        setNameError(null);
+        setError(null);
+        setLoading(false);
+        onClose();
+    }
+
     return (
         <Modal
             opened={opened}
-            onClose={onClose}
+            onClose={handleClose}
             shadow="sm"
             title={<Title c="grey">My profile</Title>}
             size="auto"
