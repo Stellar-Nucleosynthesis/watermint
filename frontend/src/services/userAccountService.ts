@@ -15,6 +15,13 @@ export const getUserAccountByUsername = async (
     return response.data;
 };
 
+export const getOpenUserAccountByUsername = async (
+    username: string
+): Promise<UserAccount> => {
+    const response = await api.get<UserAccount>("/user-account/username/" + username);
+    return response.data;
+};
+
 export const updateUserAccount = async (
     id: string, 
     dto: UserAccountRequestDto

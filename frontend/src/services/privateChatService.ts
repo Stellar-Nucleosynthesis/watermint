@@ -15,7 +15,6 @@ export const getPrivateChatsWithFilter = async (
     return response.data;
 };
 
-
 export const getPrivateChatById = async (
     id: string
 ): Promise<PrivateChat> => {

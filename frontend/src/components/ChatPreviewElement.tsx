@@ -1,4 +1,5 @@
 import { Avatar, Group, Paper, Text } from "@mantine/core";
+import { base64ToMimeDataUrl } from "../utils/base64Utils";
 
 export interface ChatPreviewProps {
     picture: string | undefined;
@@ -8,9 +9,9 @@ export interface ChatPreviewProps {
 function ChatPreviewElement({ picture, name }: ChatPreviewProps) {
     return (
         <Paper
-            h={50}
+            h={75}
             w="100%"
-            radius="md"
+            radius={0}
             p="sm"
             withBorder
             style={{
@@ -28,8 +29,8 @@ function ChatPreviewElement({ picture, name }: ChatPreviewProps) {
             }
         >
             <Group gap="sm">
-                <Avatar src={picture} radius="50%" size={32} />
-                <Text size="sm" fw={500} style={{ whiteSpace: "nowrap" }}>
+                <Avatar src={base64ToMimeDataUrl(picture)} radius="50%" size={48} />
+                <Text size="md" fw={500} style={{ whiteSpace: "nowrap" }}>
                     {name}
                 </Text>
             </Group>

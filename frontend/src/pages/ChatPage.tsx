@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import AccountSettingsModal from "../components/AccountSettingsModal";
+import AddFriendModal from "../components/AddFriendModal";
 
 function ChatPage() {
     const navigate = useNavigate();
@@ -15,7 +16,8 @@ function ChatPage() {
     const { isAuthenticated, loadingAuth } = useAuthStore();
 
     // const [ searchedName, setSearchedName ] = useState<string>("");
-    const [ profileModalOpen, setProfileModalOpen ] = useState<boolean>(false);
+    const [profileModalOpen, setProfileModalOpen] = useState<boolean>(false);
+    const [addFriendModalOpen, setAddFriendModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (!isAuthenticated && !loadingAuth) {
@@ -23,7 +25,7 @@ function ChatPage() {
         }
     }, [isAuthenticated, navigate, loadingAuth]);
 
-    if(!userAccount)
+    if (!userAccount)
         return <></>;
 
     return (
@@ -45,17 +47,18 @@ function ChatPage() {
                         <Title size="xl">{userAccount?.name}</Title>
                     </Group>
 
-                    <IconButton text="My profile" icon={<IconUserCircle size={24}/>} onClick={() => setProfileModalOpen(true)}/>
-                    <AccountSettingsModal opened={profileModalOpen} onClose={() => setProfileModalOpen(false)}/>
+                    <IconButton text="My profile" icon={<IconUserCircle size={24} />} onClick={() => setProfileModalOpen(true)} />
+                    <AccountSettingsModal opened={profileModalOpen} onClose={() => setProfileModalOpen(false)} />
 
                     <IconButton text="Settings" icon={<IconSettings size={24} />} />
 
-                    <IconButton text="Add a friend" icon={<IconUserSearch size={24} />} />
+                    <IconButton text="Add a friend" icon={<IconUserSearch size={24} />} onClick={() => setAddFriendModalOpen(true)} />
+                    <AddFriendModal opened={addFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} />
                 </Stack>
 
-                <Divider/>
+                <Divider />
 
-                <ChatList searchedName={""}/>
+                <ChatList searchedName={""} />
             </Paper>
 
         </div>
