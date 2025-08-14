@@ -12,7 +12,7 @@ import ua.pp.watermint.backend.entity.ChatContent;
 import ua.pp.watermint.backend.entity.ChatMessage;
 import ua.pp.watermint.backend.entity.UserAccount;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -151,7 +151,7 @@ public class ChatMessageRepositoryTest {
     @Test
     public void updateChatMessageTest() {
         UUID id = storedChatMessage.getId();
-        LocalDateTime lastUpdate = storedChatMessage.getUpdateTime();
+        Instant lastUpdate = storedChatMessage.getUpdateTime();
         storedChatMessage.setText("New text");
         chatMessageRepository.saveAndFlush(storedChatMessage);
         assertThat(chatMessageRepository.count()).isEqualTo(1);

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -15,9 +15,9 @@ import java.util.UUID;
 public class ChatMessageResponseDto {
     private UUID id;
 
-    private LocalDateTime createTime;
+    private Instant createTime;
 
-    private LocalDateTime updateTime;
+    private Instant updateTime;
 
     private Boolean wasUpdated;
 

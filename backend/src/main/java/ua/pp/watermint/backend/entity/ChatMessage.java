@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -33,11 +33,11 @@ public class ChatMessage {
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createTime;
+    private Instant createTime;
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updateTime;
+    private Instant updateTime;
 
     @NotNull
     @Column(nullable = false)

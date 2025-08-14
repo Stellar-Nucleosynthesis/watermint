@@ -12,8 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -35,11 +35,11 @@ public class UserAccount {
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createTime;
+    private Instant createTime;
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updateTime;
+    private Instant updateTime;
 
     @NotBlank
     @Size(max = 254)

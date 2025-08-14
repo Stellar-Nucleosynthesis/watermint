@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.pp.watermint.backend.entity.UserAccount;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -146,7 +146,7 @@ public class UserAccountRepositoryTest {
     @Test
     public void updateUserAccountTest(){
         UUID id = storedUserAccount.getId();
-        LocalDateTime lastUpdate = storedUserAccount.getUpdateTime();
+        Instant lastUpdate = storedUserAccount.getUpdateTime();
         storedUserAccount.setName("new_name");
         userAccountRepository.saveAndFlush(storedUserAccount);
         assertThat(userAccountRepository.count()).isEqualTo(1);

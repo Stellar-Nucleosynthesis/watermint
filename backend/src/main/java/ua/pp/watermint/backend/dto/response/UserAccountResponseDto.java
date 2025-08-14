@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,9 +16,9 @@ import java.util.UUID;
 public class UserAccountResponseDto {
     private UUID id;
 
-    private LocalDateTime createTime;
+    private Instant createTime;
 
-    private LocalDateTime updateTime;
+    private Instant updateTime;
 
     private String email;
 

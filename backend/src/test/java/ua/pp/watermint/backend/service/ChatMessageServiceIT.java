@@ -17,7 +17,7 @@ import ua.pp.watermint.backend.repository.ChatMessageRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -126,7 +126,7 @@ public class ChatMessageServiceIT {
     @Test
     void update_withValidChatMessage_persistsChatMessage() {
         ChatMessage initial = chatMessageRepository.findAll().getFirst();
-        LocalDateTime initialUpdateTime = initial.getUpdateTime();
+        Instant initialUpdateTime = initial.getUpdateTime();
         ChatMessageRequestDto request = ChatMessageRequestDto.builder()
                 .text("New message")
                 .build();

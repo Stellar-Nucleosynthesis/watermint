@@ -2,8 +2,8 @@ package ua.pp.watermint.backend.util;
 
 import ua.pp.watermint.backend.entity.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class TestFixtures {
@@ -12,8 +12,8 @@ public class TestFixtures {
         return UserAccount.builder()
                 .id(UUID.randomUUID())
                 .version(0)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
+                .createTime(Instant.now())
+                .updateTime(Instant.now())
                 .email("email@example.com")
                 .verified(true)
                 .username("username")
@@ -35,8 +35,8 @@ public class TestFixtures {
         return ChatMessage.builder()
                 .id(UUID.randomUUID())
                 .version(0)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
+                .createTime(Instant.now())
+                .updateTime(Instant.now())
                 .text("Example example example")
                 .userAccount(getExampleUserAccount())
                 .chatContent(getExampleChatContent())
@@ -47,7 +47,7 @@ public class TestFixtures {
         return ChatEvent.builder()
                 .id(UUID.randomUUID())
                 .version(0)
-                .createTime(LocalDateTime.now())
+                .createTime(Instant.now())
                 .text("Example example example")
                 .chatContent(getExampleChatContent())
                 .build();
@@ -57,7 +57,7 @@ public class TestFixtures {
         return PrivateChat.builder()
                 .id(UUID.randomUUID())
                 .version(0)
-                .createTime(LocalDateTime.now())
+                .createTime(Instant.now())
                 .userAccount1(getExampleUserAccount())
                 .userAccount2(getExampleUserAccount())
                 .chatContent(getExampleChatContent())

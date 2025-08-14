@@ -16,8 +16,8 @@ import ua.pp.watermint.backend.entity.UserAccount;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -145,7 +145,7 @@ public class UserAccountServiceIT {
     @Test
     void update_withValidUserAccount_persistsUserAccount() {
         UserAccount initial = userAccountRepository.findAll().getFirst();
-        LocalDateTime initialUpdateTime = initial.getUpdateTime();
+        Instant initialUpdateTime = initial.getUpdateTime();
         UserAccountRequestDto request = UserAccountRequestDto.builder()
                 .email("super_email@example.com")
                 .username("super_username")
