@@ -26,7 +26,7 @@ public class PrivateChatController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PrivateChatResponseDto>> search(@Validated @RequestBody PrivateChatFilterDto filter){
+    public ResponseEntity<List<PrivateChatResponseDto>> search(@Validated @ModelAttribute PrivateChatFilterDto filter){
         return ResponseEntity.ok(privateChatService.search(filter));
     }
 

@@ -3,6 +3,7 @@ import Cropper from "react-easy-crop";
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { useState, useCallback, useRef } from "react";
+import { base64ToMimeDataUrl, mimeDataUrlToBase64 } from "../utils/base64Utils";
 
 const createImage = (url: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
@@ -12,16 +13,6 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
         image.setAttribute("crossOrigin", "anonymous");
         image.src = url;
     });
-
-function mimeDataUrlToBase64(dataUrl: string): string {
-    return dataUrl.replace(/^data:.*;base64,/, "");
-}
-
-function base64ToMimeDataUrl(bytes: string | undefined, mimeType = "image/png"): string | undefined {
-    if (!bytes)
-        return undefined;
-    return `data:${mimeType};base64,${bytes}`;
-}
 
 async function getCroppedImg(imageSrc: string, pixelCrop: { x: number; y: number; width: number; height: number; }) {
     const image = await createImage(imageSrc);

@@ -1,7 +1,7 @@
 export interface UserAccount {
     id: string;
-    createTime: string;
-    updateTime: string;
+    createTime: Date;
+    updateTime: Date;
     email: string;
     verified: boolean;
     username: string;

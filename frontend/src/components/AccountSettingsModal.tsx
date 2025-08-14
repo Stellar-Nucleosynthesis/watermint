@@ -14,12 +14,12 @@ import EditableAvatar from "./EditableAvatar";
 interface AccountSettingsModalProps {
     opened: boolean,
     onClose: (param: void) => void,
-    w: string
+    w?: string
 }
 
-function AccountSettingsModal({ opened, onClose, w }: AccountSettingsModalProps) {
+function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModalProps) {
     const navigate = useNavigate();
-    const { isAuthenticated, loadingAuth, token, currentUsername } = useAuthStore();
+    const { isAuthenticated, loadingAuth } = useAuthStore();
     const { userAccount, fetchByUsername } = useUserAccountStore();
 
     const [email, setEmail] = useState<string>(userAccount?.email ?? "");
@@ -70,15 +70,11 @@ function AccountSettingsModal({ opened, onClose, w }: AccountSettingsModalProps)
         email &&
         name;
 
-    console.log(isAuthenticated);
-    console.log(token);
-    console.log(currentUsername);
-    console.log(userAccount);
     useEffect(() => {
         if (!isAuthenticated && !loadingAuth) {
             navigate("/login");
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, loadingAuth]);
 
     if (!userAccount)
         return <></>;

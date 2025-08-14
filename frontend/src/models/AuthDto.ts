@@ -1,8 +1,8 @@
 export interface AuthRequestDto{
-    username: string,
-    password: string
+    username: string;
+    password: string;
 };
 
 export interface AuthResponseDto{
-    token: string
+    token: string;
 };
