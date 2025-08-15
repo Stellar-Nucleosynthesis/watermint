@@ -2,6 +2,9 @@ package ua.pp.watermint.backend.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.pp.watermint.backend.entity.*;
 import ua.pp.watermint.backend.repository.*;
 
@@ -14,6 +17,7 @@ public class TestDatabaseInitializer implements CommandLineRunner {
     private final ChatContentRepository chatContentRepository;
     private final ChatEventRepository chatEventRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final PasswordEncoder encoder;
 
     @Override
     public void run(String... args) {
@@ -21,6 +25,7 @@ public class TestDatabaseInitializer implements CommandLineRunner {
         addPrivateChats();
         addChatEvents();
         addChatMessages();
+        addAuthenticatedUser();
     }
 
     private void addUsers(){
@@ -29,14 +34,14 @@ public class TestDatabaseInitializer implements CommandLineRunner {
                         .email("user1@example.com")
                         .verified(true)
                         .username("user1")
-                        .password("password")
+                        .password(encoder.encode("password"))
                         .name("first name")
                         .build(),
                 UserAccount.builder()
                         .email("user2@example.com")
                         .verified(true)
                         .username("user2")
-                        .password("password")
+                        .password(encoder.encode("password"))
                         .name("second name")
                         .build()
         ));
@@ -86,5 +91,12 @@ public class TestDatabaseInitializer implements CommandLineRunner {
                         .chatContent(content)
                         .build()
         ));
+    }
+
+    private void addAuthenticatedUser(){
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(
+                        "user1", "password", List.of())
+        );
     }
 }

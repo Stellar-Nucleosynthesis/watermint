@@ -55,7 +55,7 @@ public class PrivateChatServiceImpl implements PrivateChatService {
             Predicate user2NameMatch = cb.conjunction();
 
             if (otherName != null && !otherName.isBlank()) {
-                user2NameMatch = cb.like(cb.lower(user2Join.get("username")), "%" + otherName.toLowerCase() + "%");
+                user2NameMatch = cb.like(cb.lower(user2Join.get("name")), "%" + otherName.toLowerCase() + "%");
             }
 
             return cb.and(user1Match, user2NameMatch);
@@ -69,7 +69,7 @@ public class PrivateChatServiceImpl implements PrivateChatService {
             Predicate user1NameMatch = cb.conjunction();
 
             if (otherName != null && !otherName.isBlank()) {
-                user1NameMatch = cb.like(cb.lower(user1Join.get("username")), "%" + otherName.toLowerCase() + "%");
+                user1NameMatch = cb.like(cb.lower(user1Join.get("name")), "%" + otherName.toLowerCase() + "%");
             }
 
             return cb.and(user2Match, user1NameMatch);

@@ -14,6 +14,7 @@ import ua.pp.watermint.backend.dto.response.ChatEventResponseDto;
 import ua.pp.watermint.backend.entity.ChatEvent;
 import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.ChatEventRepository;
+import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import static ua.pp.watermint.backend.util.DtoAssertions.assertChatEventEquals;
 @SpringBootTest
 @Transactional
 @Import(TestDatabaseInitializer.class)
-class ChatEventServiceIT {
+class ChatEventServiceIT extends BaseTestEnv {
     @Autowired
     private ChatEventService chatEventService;
 

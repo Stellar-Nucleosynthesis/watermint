@@ -12,10 +12,10 @@ import ua.pp.watermint.backend.dto.filter.PrivateChatFilterDto;
 import ua.pp.watermint.backend.dto.request.PrivateChatRequestDto;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 import ua.pp.watermint.backend.entity.PrivateChat;
-import ua.pp.watermint.backend.entity.UserAccount;
 import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.PrivateChatRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
+import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import static ua.pp.watermint.backend.util.DtoAssertions.assertPrivateChatEquals
 @SpringBootTest
 @Transactional
 @Import(TestDatabaseInitializer.class)
-public class PrivateChatServiceIT {
+public class PrivateChatServiceIT extends BaseTestEnv {
     @Autowired
     private PrivateChatService privateChatService;
 
@@ -47,9 +47,8 @@ public class PrivateChatServiceIT {
 
     @BeforeEach
     void setUp() {
-        List<UserAccount> userAccounts = userAccountRepository.findAll();
-        storedUserAccount1Id = userAccounts.getFirst().getId();
-        storedUserAccount2Id = userAccounts.getLast().getId();
+        storedUserAccount1Id = userAccountRepository.findByUsername("user1").orElseThrow().getId();
+        storedUserAccount2Id = userAccountRepository.findByUsername("user2").orElseThrow().getId();
     }
 
     @Test
@@ -78,8 +77,8 @@ public class PrivateChatServiceIT {
     @Test
     void search_withExistingUserAccount2Name_returnsMatchingPrivateChats() {
         PrivateChatFilterDto filter = new PrivateChatFilterDto();
-        filter.setUserAccount1Id(storedUserAccount2Id);
-        filter.setUserAccount2Name("user1");
+        filter.setUserAccount1Id(storedUserAccount1Id);
+        filter.setUserAccount2Name("second name");
         List<PrivateChatResponseDto> response = privateChatService.search(filter);
         assertThat(response).hasSize(1);
     }
@@ -87,7 +86,7 @@ public class PrivateChatServiceIT {
     @Test
     void search_withNonExistentUserAccount2Name_returnsNoPrivateChats() {
         PrivateChatFilterDto filter = new PrivateChatFilterDto();
-        filter.setUserAccount1Id(storedUserAccount2Id);
+        filter.setUserAccount1Id(storedUserAccount1Id);
         filter.setUserAccount2Name(UUID.randomUUID().toString());
         List<PrivateChatResponseDto> response = privateChatService.search(filter);
         assertThat(response).hasSize(0);

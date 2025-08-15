@@ -76,7 +76,10 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public ChatMessageResponseDto create(ChatMessageRequestDto dto) {
-        checkChatContentAccess(dto.getChatContentId());
+        UUID contentId = dto.getChatContentId();
+        if(!chatContentRepository.existsById(contentId))
+            throw new EntityNotFoundException("Chat content with id " + contentId + " not found!");
+        checkChatContentAccess(contentId);
         UserAccount currentUser = authorizationService.getCurrentUser();
         if(!dto.getUserAccountId().equals(currentUser.getId()))
             throw new AccessDeniedException("Access denied: tried to save a message as another account!");

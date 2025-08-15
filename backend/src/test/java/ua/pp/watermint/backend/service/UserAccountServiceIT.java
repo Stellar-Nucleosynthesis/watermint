@@ -14,6 +14,7 @@ import ua.pp.watermint.backend.dto.request.UserAccountRequestDto;
 import ua.pp.watermint.backend.dto.response.UserAccountResponseDto;
 import ua.pp.watermint.backend.entity.UserAccount;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
+import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
 import java.time.Instant;
@@ -28,7 +29,7 @@ import static ua.pp.watermint.backend.util.DtoAssertions.assertUserAccountEquals
 @SpringBootTest
 @Transactional
 @Import(TestDatabaseInitializer.class)
-public class UserAccountServiceIT {
+public class UserAccountServiceIT extends BaseTestEnv {
     @Autowired
     private UserAccountService userAccountService;
 
@@ -37,7 +38,7 @@ public class UserAccountServiceIT {
 
     @Test
     void getById_withExistingId_returnsUserAccount() {
-        UserAccount account = userAccountRepository.findAll().getFirst();
+        UserAccount account = userAccountRepository.findByUsername("user1").orElseThrow();
         UserAccountResponseDto response = userAccountService.getById(account.getId());
         assertThat(response).isNotNull();
         assertUserAccountEquals(account, response);
@@ -102,13 +103,32 @@ public class UserAccountServiceIT {
     @CsvSource({
             ",super_username,super_password,User Name",
             "super_email@example.com,,super_password,User Name",
-            "super_email@example.com,super_username,,User Name",
             "super_email@example.com,super_username,super_password,"
     })
     void create_withGivenInput_throwsConstraintViolationException(
             String email, String username, String password, String name
     ) {
         assertThrows(ConstraintViolationException.class, () -> {
+            userAccountService.create(
+                    UserAccountRequestDto.builder()
+                            .email(email)
+                            .username(username)
+                            .password(password)
+                            .name(name)
+                            .build()
+            );
+            userAccountRepository.flush();
+        });
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "super_email@example.com,super_username,,User Name",
+    })
+    void create_withGivenInput_throwsIllegalArgumentException(
+            String email, String username, String password, String name
+    ) {
+        assertThrows(IllegalArgumentException.class, () -> {
             userAccountService.create(
                     UserAccountRequestDto.builder()
                             .email(email)
@@ -207,19 +227,13 @@ public class UserAccountServiceIT {
 
     @ParameterizedTest
     @CsvSource({
-            "user1@example.com,super_username",
-            "super_email@example.com,user1"
+            "user2@example.com,super_username",
+            "super_email@example.com,user2"
     })
     void update_withGivenInput_throwsDataIntegrityViolationException(
             String email, String username
     ) {
-        UUID id = userAccountRepository.save(
-                UserAccount.builder()
-                        .email("smth@example.com")
-                        .password("password")
-                        .name("New name")
-                        .build()
-        ).getId();
+        UUID id = userAccountRepository.findByUsername("user1").orElseThrow().getId();
         assertThrows(DataIntegrityViolationException.class, () -> {
             userAccountService.update(id,
                     UserAccountRequestDto.builder()

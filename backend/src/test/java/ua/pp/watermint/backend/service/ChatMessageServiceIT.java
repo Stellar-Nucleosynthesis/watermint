@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 import ua.pp.watermint.backend.dto.filter.ChatMessageFilterDto;
 import ua.pp.watermint.backend.dto.request.ChatMessageRequestDto;
@@ -15,6 +16,7 @@ import ua.pp.watermint.backend.entity.ChatMessage;
 import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.ChatMessageRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
+import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
 import java.time.Instant;
@@ -28,7 +30,7 @@ import static ua.pp.watermint.backend.util.DtoAssertions.assertChatMessageEquals
 @SpringBootTest
 @Transactional
 @Import(TestDatabaseInitializer.class)
-public class ChatMessageServiceIT {
+public class ChatMessageServiceIT extends BaseTestEnv {
     @Autowired
     private ChatMessageService chatMessageService;
 
@@ -48,7 +50,7 @@ public class ChatMessageServiceIT {
     @BeforeEach
     void setUp() {
         storedChatContentId = chatContentRepository.findAll().getFirst().getId();
-        storedUserAccountId = userAccountRepository.findAll().getFirst().getId();
+        storedUserAccountId = userAccountRepository.findByUsername("user1").orElseThrow().getId();
     }
 
     @Test
@@ -97,8 +99,8 @@ public class ChatMessageServiceIT {
     }
 
     @Test
-    void create_withNonExistentUserAccountId_throwsEntityNotFoundException() {
-        assertThrows(EntityNotFoundException.class, () ->
+    void create_withNonExistentUserAccountId_throwsAccessDeniedException() {
+        assertThrows(AccessDeniedException.class, () ->
                 chatMessageService.create(
                         ChatMessageRequestDto.builder()
                                 .text("Cool message")
