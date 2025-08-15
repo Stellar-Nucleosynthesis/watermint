@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import ua.pp.watermint.backend.dto.filter.ChatEventFilterDto;
 import ua.pp.watermint.backend.dto.request.ChatEventRequestDto;
@@ -17,7 +20,6 @@ import ua.pp.watermint.backend.repository.ChatEventRepository;
 import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,9 +41,12 @@ class ChatEventServiceIT extends BaseTestEnv {
 
     private UUID storedChatContentId;
 
+    private Pageable defaultPageable;
+
     @BeforeEach
     void setUp() {
         storedChatContentId = chatContentRepository.findAll().getFirst().getId();
+        defaultPageable = PageRequest.of(0, 10);
     }
 
     @Test
@@ -102,7 +107,7 @@ class ChatEventServiceIT extends BaseTestEnv {
     void search_withNoFilters_returnsAllChatEvents() {
         ChatEventFilterDto filter = new ChatEventFilterDto();
         filter.setChatContentId(storedChatContentId);
-        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        Page<ChatEventResponseDto> response = chatEventService.search(filter, defaultPageable);
         assertThat(response).hasSize(2);
     }
 
@@ -111,7 +116,7 @@ class ChatEventServiceIT extends BaseTestEnv {
         ChatEventFilterDto filter = new ChatEventFilterDto();
         filter.setChatContentId(storedChatContentId);
         filter.setText("birthday");
-        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        Page<ChatEventResponseDto> response = chatEventService.search(filter, defaultPageable);
         assertThat(response).hasSize(1);
     }
 
@@ -120,7 +125,7 @@ class ChatEventServiceIT extends BaseTestEnv {
         ChatEventFilterDto filter = new ChatEventFilterDto();
         filter.setChatContentId(storedChatContentId);
         filter.setText("veryinvalidtestext");
-        List<ChatEventResponseDto> response = chatEventService.search(filter);
+        Page<ChatEventResponseDto> response = chatEventService.search(filter, defaultPageable);
         assertThat(response).hasSize(0);
     }
 
@@ -129,7 +134,7 @@ class ChatEventServiceIT extends BaseTestEnv {
         ChatEventFilterDto filter = new ChatEventFilterDto();
         filter.setChatContentId(UUID.randomUUID());
         assertThrows(EntityNotFoundException.class, () ->
-                chatEventService.search(filter)
+                chatEventService.search(filter, defaultPageable)
         );
     }
 }

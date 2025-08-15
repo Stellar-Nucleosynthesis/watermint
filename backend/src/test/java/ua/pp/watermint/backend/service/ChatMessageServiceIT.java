@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 import ua.pp.watermint.backend.dto.filter.ChatMessageFilterDto;
@@ -20,7 +23,6 @@ import ua.pp.watermint.backend.util.BaseTestEnv;
 import ua.pp.watermint.backend.util.TestDatabaseInitializer;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,10 +49,13 @@ public class ChatMessageServiceIT extends BaseTestEnv {
 
     private UUID storedUserAccountId;
 
+    private Pageable defaultPageable;
+
     @BeforeEach
     void setUp() {
         storedChatContentId = chatContentRepository.findAll().getFirst().getId();
         storedUserAccountId = userAccountRepository.findByUsername("user1").orElseThrow().getId();
+        defaultPageable = PageRequest.of(0, 10);
     }
 
     @Test
@@ -168,7 +173,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
     void search_withNoFilters_returnsAllChatMessages() {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(storedChatContentId);
-        List<ChatMessageResponseDto> response = chatMessageService.search(filter);
+        Page<ChatMessageResponseDto> response = chatMessageService.search(filter, defaultPageable);
         assertThat(response).hasSize(2);
     }
 
@@ -177,7 +182,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(storedChatContentId);
         filter.setUserAccountId(storedUserAccountId);
-        List<ChatMessageResponseDto> response = chatMessageService.search(filter);
+        Page<ChatMessageResponseDto> response = chatMessageService.search(filter, defaultPageable);
         assertThat(response).hasSize(1);
     }
 
@@ -186,7 +191,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(storedChatContentId);
         filter.setText("another");
-        List<ChatMessageResponseDto> response = chatMessageService.search(filter);
+        Page<ChatMessageResponseDto> response = chatMessageService.search(filter, defaultPageable);
         assertThat(response).hasSize(1);
     }
 
@@ -195,7 +200,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(storedChatContentId);
         filter.setText("veryinvalidtestext");
-        List<ChatMessageResponseDto> response = chatMessageService.search(filter);
+        Page<ChatMessageResponseDto> response = chatMessageService.search(filter, defaultPageable);
         assertThat(response).hasSize(0);
     }
 
@@ -204,7 +209,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
         ChatMessageFilterDto filter = new ChatMessageFilterDto();
         filter.setChatContentId(UUID.randomUUID());
         assertThrows(EntityNotFoundException.class, () ->
-                chatMessageService.search(filter)
+                chatMessageService.search(filter, defaultPageable)
         );
     }
 
@@ -214,7 +219,7 @@ public class ChatMessageServiceIT extends BaseTestEnv {
         filter.setChatContentId(storedChatContentId);
         filter.setUserAccountId(UUID.randomUUID());
         assertThrows(EntityNotFoundException.class, () ->
-                chatMessageService.search(filter)
+                chatMessageService.search(filter, defaultPageable)
         );
     }
 
