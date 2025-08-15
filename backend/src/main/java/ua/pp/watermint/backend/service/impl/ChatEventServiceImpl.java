@@ -2,6 +2,8 @@ package ua.pp.watermint.backend.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ua.pp.watermint.backend.dto.filter.ChatEventFilterDto;
@@ -14,7 +16,6 @@ import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.ChatEventRepository;
 import ua.pp.watermint.backend.service.ChatEventService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,7 +39,7 @@ public class ChatEventServiceImpl implements ChatEventService {
     }
 
     @Override
-    public List<ChatEventResponseDto> search(ChatEventFilterDto filter) {
+    public Page<ChatEventResponseDto> search(ChatEventFilterDto filter, Pageable pageable) {
         if(!chatContentRepository.existsById(filter.getChatContentId()))
             throw new EntityNotFoundException("Chat content with id " + filter.getChatContentId() + " not found!");
 
@@ -54,11 +55,8 @@ public class ChatEventServiceImpl implements ChatEventService {
                     cb.greaterThanOrEqualTo(root.get("createTime"), filter.getFrom()));
         if(filter.getTo() != null)
             spec = spec.and((root, query, cb) ->
-                    cb.lessThanOrEqualTo(root.get("createTime"), filter.getTo()));
+                    cb.lessThan(root.get("createTime"), filter.getTo()));
 
-        return chatEventRepository.findAll(spec)
-                .stream()
-                .map(chatEventResponseMapper::chatEventToDto)
-                .toList();
+        return chatEventRepository.findAll(spec, pageable).map(chatEventResponseMapper::chatEventToDto);
     }
 }

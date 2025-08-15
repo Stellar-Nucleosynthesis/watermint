@@ -1,6 +1,8 @@
 package ua.pp.watermint.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,6 @@ import ua.pp.watermint.backend.dto.filter.ChatEventFilterDto;
 import ua.pp.watermint.backend.dto.response.ChatEventResponseDto;
 import ua.pp.watermint.backend.service.ChatEventService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +24,9 @@ public class ChatEventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ChatEventResponseDto>> search(@Validated @RequestBody ChatEventFilterDto filter) {
-        return ResponseEntity.ok(chatEventService.search(filter));
+    public ResponseEntity<Page<ChatEventResponseDto>> search
+            (@Validated @ModelAttribute ChatEventFilterDto filter,
+             @ModelAttribute Pageable pageable) {
+        return ResponseEntity.ok(chatEventService.search(filter, pageable));
     }
 }
