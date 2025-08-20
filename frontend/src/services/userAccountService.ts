@@ -9,8 +9,10 @@ export const createUserAccount = async (
 };
 
 export const getUserAccountByUsername = async (
-    username: string
-): Promise<UserAccount> => {
+    username: string | null
+): Promise<UserAccount | null> => {
+    if(!username)
+        return null;
     const response = await api.get<UserAccount>("/user-account/username/" + username);
     return response.data;
 };

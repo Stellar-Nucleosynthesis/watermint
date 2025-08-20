@@ -1,4 +1,4 @@
-import { Avatar, Stack, Group, Title, Paper, Divider } from "@mantine/core";
+import { Avatar, Stack, Group, Title, Paper, Divider, TextInput } from "@mantine/core";
 import { useUserAccountStore } from "../stores/userAccountStore";
 import { useAuthStore } from "../stores/authStore";
 import { base64ToMimeDataUrl } from "../utils/base64Utils";
@@ -9,15 +9,21 @@ import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import AccountSettingsModal from "../components/AccountSettingsModal";
 import AddFriendModal from "../components/AddFriendModal";
+import NoChatSelectedComponent from "../components/NoChatSelectedComponent";
 
 function ChatPage() {
     const navigate = useNavigate();
     const { userAccount } = useUserAccountStore();
     const { isAuthenticated, loadingAuth } = useAuthStore();
 
-    // const [ searchedName, setSearchedName ] = useState<string>("");
+    const [searchedChatName, setSearchedChatName] = useState<string>("");
     const [profileModalOpen, setProfileModalOpen] = useState<boolean>(false);
     const [addFriendModalOpen, setAddFriendModalOpen] = useState<boolean>(false);
+    const [selectedChatDisplay, setSelectedChatDisplay] = useState(<NoChatSelectedComponent />);
+
+    const onSearchedChatNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchedChatName(e.currentTarget.value);
+    };
 
     useEffect(() => {
         if (!isAuthenticated && !loadingAuth) {
@@ -58,9 +64,19 @@ function ChatPage() {
 
                 <Divider />
 
-                <ChatList searchedName={""} />
+                <Group p="md">
+                    <TextInput
+                        w="100%"
+                        radius="xl"
+                        variant="filled"
+                        placeholder="Search"
+                        value={searchedChatName}
+                        onChange={onSearchedChatNameChange}
+                    />
+                </Group>
+                <ChatList searchedName={searchedChatName} setChatDisplay={setSelectedChatDisplay} />
             </Paper>
-
+            {selectedChatDisplay}
         </div>
     );
 }

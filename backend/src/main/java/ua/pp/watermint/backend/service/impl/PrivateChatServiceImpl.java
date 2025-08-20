@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ua.pp.watermint.backend.dto.filter.PrivateChatFilterDto;
+import ua.pp.watermint.backend.dto.request.ChatEventRequestDto;
 import ua.pp.watermint.backend.dto.request.PrivateChatRequestDto;
 import ua.pp.watermint.backend.dto.response.PrivateChatResponseDto;
 import ua.pp.watermint.backend.entity.PrivateChat;
@@ -17,6 +18,7 @@ import ua.pp.watermint.backend.mapper.response.PrivateChatResponseMapper;
 import ua.pp.watermint.backend.repository.PrivateChatRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
 import ua.pp.watermint.backend.security.service.AuthorizationService;
+import ua.pp.watermint.backend.service.ChatEventService;
 import ua.pp.watermint.backend.service.PrivateChatService;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class PrivateChatServiceImpl implements PrivateChatService {
     private final PrivateChatRequestMapper privateChatRequestMapper;
     private final PrivateChatResponseMapper privateChatResponseMapper;
     private final AuthorizationService authorizationService;
+    private final ChatEventService chatEventService;
 
     @Override
     public PrivateChatResponseDto getById(UUID id) {
@@ -95,8 +98,12 @@ public class PrivateChatServiceImpl implements PrivateChatService {
                 || privateChatRepository.existsByUserAccount1_IdAndUserAccount2_Id(user2Id, user1Id)){
             throw new EntityExistsException("Private chat between users already exists");
         }
-        return privateChatResponseMapper.privateChatToDto(
-                privateChatRepository.save(privateChatRequestMapper.dtoToPrivateChat(dto)));
+        PrivateChat chat = privateChatRepository.save(privateChatRequestMapper.dtoToPrivateChat(dto));
+        chatEventService.create(ChatEventRequestDto.builder()
+                .chatContentId(chat.getChatContent().getId())
+                .text("Chat has been created")
+                .build());
+        return privateChatResponseMapper.privateChatToDto(chat);
     }
 
     @Override

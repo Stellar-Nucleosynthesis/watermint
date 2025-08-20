@@ -129,6 +129,7 @@ function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModa
             shadow="sm"
             title={<Title c="grey">My profile</Title>}
             size="auto"
+            radius="md"
         >
             <Stack
                 w={w}

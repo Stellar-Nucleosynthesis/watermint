@@ -23,7 +23,7 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
     const { isAuthenticated, loadingAuth } = useAuthStore();
     const { userAccount } = useUserAccountStore();
 
-    const [username, setUsername] = useState<string>("");
+    const [username, setUsername] = useState<string | null>(null);
     const [usernameError, setUsernameError] = useState<string | null>(null);
     const { data: selectedUser, loading: loadingSearch } = useFetch(getUserAccountByUsername, [username]);
 
@@ -93,6 +93,7 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
             shadow="sm"
             title={<Title order={3} c="grey">Find by username</Title>}
             size="auto"
+            radius="md"
         >
             <Stack
                 w={w}
@@ -101,8 +102,10 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
                 p="md"
             >
                 <TextInput
+                    radius="xl"
+                    variant="filled"
                     placeholder="Username"
-                    value={username}
+                    value={username ?? ""}
                     onChange={onUsernameChange}
                     error={usernameError}
                     rightSection={loadingSearch && <Loader color="blue" size="sm" />}

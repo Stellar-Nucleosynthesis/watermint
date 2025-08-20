@@ -28,8 +28,8 @@ public class ChatMessageController {
 
     @GetMapping
     public ResponseEntity<Page<ChatMessageResponseDto>> search(
-            @Validated @ModelAttribute ChatMessageFilterDto filter,
-            @ModelAttribute Pageable pageable){
+            @Validated ChatMessageFilterDto filter,
+            Pageable pageable){
         return ResponseEntity.ok(chatMessageService.search(filter, pageable));
     }
 

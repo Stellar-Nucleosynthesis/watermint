@@ -4,16 +4,16 @@ import { base64ToMimeDataUrl } from "../utils/base64Utils";
 export interface ChatPreviewProps {
     picture: string | undefined;
     name: string;
+    onClick: () => void;
 }
 
-function ChatPreviewElement({ picture, name }: ChatPreviewProps) {
+function ChatPreviewElement({ picture, name, onClick }: ChatPreviewProps) {
     return (
         <Paper
             h={75}
             w="100%"
             radius={0}
             p="sm"
-            withBorder
             style={{
                 display: "flex",
                 alignItems: "center",
@@ -27,6 +27,7 @@ function ChatPreviewElement({ picture, name }: ChatPreviewProps) {
             onMouseLeave={(e) =>
                 ((e.currentTarget.style.backgroundColor = "white"))
             }
+            onClick={onClick}
         >
             <Group gap="sm">
                 <Avatar src={base64ToMimeDataUrl(picture)} radius="50%" size={48} />

@@ -13,11 +13,6 @@ export interface ChatEvent extends ChatItem {
     chatContent: ChatContent;
 }
 
-export interface ChatEventRequestDto {
-    text: string;
-    chatContentId: string;
-}
-
 export interface ChatMessage extends ChatItem {
     id: string;
     createTime: Date;
@@ -29,7 +24,7 @@ export interface ChatMessage extends ChatItem {
 }
 
 export interface ChatMessageRequestDto {
-    text: string;
-    userAccountId: string;
-    chatContentId: string;
+    text?: string;
+    userAccountId?: string;
+    chatContentId?: string;
 }

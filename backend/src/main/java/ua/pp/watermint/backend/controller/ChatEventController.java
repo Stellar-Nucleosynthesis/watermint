@@ -24,9 +24,9 @@ public class ChatEventController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ChatEventResponseDto>> search
-            (@Validated @ModelAttribute ChatEventFilterDto filter,
-             @ModelAttribute Pageable pageable) {
+    public ResponseEntity<Page<ChatEventResponseDto>> search(
+            @Validated ChatEventFilterDto filter,
+            Pageable pageable) {
         return ResponseEntity.ok(chatEventService.search(filter, pageable));
     }
 }

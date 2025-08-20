@@ -1,16 +1,17 @@
 import { Stack } from "@mantine/core";
-import ChatPreviewElement, { type ChatPreviewProps } from "./ChatPreviewElement";
+import ChatPreviewElement from "./ChatPreviewElement";
 import useFetch from "../hooks/useFetch";
 import { getPrivateChatsWithFilter } from "../services/privateChatService";
 import { useUserAccountStore } from "../stores/userAccountStore";
-import type { PrivateChat } from "../models/PrivateChat.ts";
 import { useMemo } from "react";
+import ViewedPrivateChat from "./ViewedPrivateChat.tsx";
 
 interface ChatListProps {
     searchedName: string;
+    setChatDisplay: (component: React.ReactElement) => void;
 }
 
-function ChatList({ searchedName }: ChatListProps) {
+function ChatList({ searchedName, setChatDisplay }: ChatListProps) {
     const { userAccount } = useUserAccountStore();
     const filter = useMemo(() => ({
         userAccount1Id: userAccount?.id,
@@ -24,20 +25,17 @@ function ChatList({ searchedName }: ChatListProps) {
     if (chats == null)
         return <></>;
 
-    const chatProps: ChatPreviewProps[] = chats.map((chat: PrivateChat) => {
-        const id1 = chat.userAccount1.id;
-        const anotherAccount = userAccount.id == id1 ? chat.userAccount2 : chat.userAccount1;
-        return { name: anotherAccount.name, picture: anotherAccount.profilePicture };
-    });
-
     return (
-        <Stack gap="xs">
-            {chatProps.map((props) => {
+        <Stack gap={0}>
+            {chats.map((chat) => {
+                const id1 = chat.userAccount1.id;
+                const anotherAccount = userAccount.id == id1 ? chat.userAccount2 : chat.userAccount1;
                 return (
                     <ChatPreviewElement
-                        key={props.name}
-                        picture={props.picture}
-                        name={props.name}
+                        key={anotherAccount.name}
+                        picture={anotherAccount.profilePicture}
+                        name={anotherAccount.name}
+                        onClick={() => setChatDisplay(<ViewedPrivateChat chat={chat} />)}
                     />
                 )
             })}

@@ -120,6 +120,7 @@ function SignUpPanel({ w }: SignUpPanelProps) {
             withBorder
             p="xl"
             style={{ width: w, maxWidth: 400, minWidth: 280 }}
+            radius="md"
         >
             <Stack>
                 <Title order={1} ta="center">Watermint</Title>

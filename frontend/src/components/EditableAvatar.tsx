@@ -129,6 +129,7 @@ function EditableAvatar({ picture, setPicture }: EditableAvatarProps) {
                 size="md"
                 withCloseButton={false}
                 p="md"
+                radius="md"
             >
                 <div style={{ position: "relative", width: "100%", height: 300, background: "#111" }}>
                     {selectedImage && (
