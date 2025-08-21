@@ -4,12 +4,11 @@ import { useAuthStore } from "../stores/authStore";
 import { base64ToMimeDataUrl } from "../utils/base64Utils";
 import { IconUserCircle, IconSettings, IconUserSearch } from "@tabler/icons-react";
 import IconButton from "../components/IconButton";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import AccountSettingsModal from "../components/AccountSettingsModal";
 import AddFriendModal from "../components/AddFriendModal";
-import NoChatSelectedComponent from "../components/NoChatSelectedComponent";
 
 function ChatPage() {
     const navigate = useNavigate();
@@ -19,7 +18,6 @@ function ChatPage() {
     const [searchedChatName, setSearchedChatName] = useState<string>("");
     const [profileModalOpen, setProfileModalOpen] = useState<boolean>(false);
     const [addFriendModalOpen, setAddFriendModalOpen] = useState<boolean>(false);
-    const [selectedChatDisplay, setSelectedChatDisplay] = useState(<NoChatSelectedComponent />);
 
     const onSearchedChatNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchedChatName(e.currentTarget.value);
@@ -74,9 +72,9 @@ function ChatPage() {
                         onChange={onSearchedChatNameChange}
                     />
                 </Group>
-                <ChatList searchedName={searchedChatName} setChatDisplay={setSelectedChatDisplay} />
+                <ChatList searchedName={searchedChatName} />
             </Paper>
-            {selectedChatDisplay}
+            <Outlet />
         </div>
     );
 }

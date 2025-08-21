@@ -1,6 +1,6 @@
 import { Paper, Flex, Title } from "@mantine/core";
 
-function NoChatSelectedComponent() {
+function NoSelectedChat() {
     return (
         <Paper w="75%" bg="aliceblue">
             <Flex justify="center" align="center" w="100%" h="100%">
@@ -10,4 +10,4 @@ function NoChatSelectedComponent() {
     );
 }
 
-export default NoChatSelectedComponent;
+export default NoSelectedChat;

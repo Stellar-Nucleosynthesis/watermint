@@ -9,15 +9,17 @@ interface PrivateChatFilter {
 export const getPrivateChatsWithFilter = async (
     filter: PrivateChatFilter
 ): Promise<PrivateChat[]> => {
-    if(!filter.userAccount1Id)
+    if (!filter.userAccount1Id)
         return [];
     const response = await api.get<PrivateChat[]>("/private-chat", { params: filter });
     return response.data;
 };
 
 export const getPrivateChatById = async (
-    id: string
-): Promise<PrivateChat> => {
+    id: string | null
+): Promise<PrivateChat | null> => {
+    if (!id)
+        return null;
     const response = await api.get<PrivateChat>("/private-chat/" + id);
     return response.data;
 };

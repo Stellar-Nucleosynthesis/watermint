@@ -4,14 +4,14 @@ import useFetch from "../hooks/useFetch";
 import { getPrivateChatsWithFilter } from "../services/privateChatService";
 import { useUserAccountStore } from "../stores/userAccountStore";
 import { useMemo } from "react";
-import ViewedPrivateChat from "./ViewedPrivateChat.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface ChatListProps {
     searchedName: string;
-    setChatDisplay: (component: React.ReactElement) => void;
 }
 
-function ChatList({ searchedName, setChatDisplay }: ChatListProps) {
+function ChatList({ searchedName }: ChatListProps) {
+    const navigate = useNavigate();
     const { userAccount } = useUserAccountStore();
     const filter = useMemo(() => ({
         userAccount1Id: userAccount?.id,
@@ -35,7 +35,7 @@ function ChatList({ searchedName, setChatDisplay }: ChatListProps) {
                         key={anotherAccount.name}
                         picture={anotherAccount.profilePicture}
                         name={anotherAccount.name}
-                        onClick={() => setChatDisplay(<ViewedPrivateChat chat={chat} />)}
+                        onClick={() => navigate(`/chats/private-chat/${chat.id}`)}
                     />
                 )
             })}
