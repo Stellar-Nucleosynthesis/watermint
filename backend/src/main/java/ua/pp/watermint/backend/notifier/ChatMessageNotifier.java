@@ -15,13 +15,13 @@ public class ChatMessageNotifier {
 
     public void broadcastCreate(ChatMessageResponseDto message) {
         UUID chatContentId = message.getChatContent().getId();
-        messagingTemplate.convertAndSend("/chatContent/" + chatContentId + "/messages",
+        messagingTemplate.convertAndSend("/chat-content/" + chatContentId + "/messages",
                 new ChatMessageNotificationDto(ChatMessageNotificationDto.Action.CREATE, message));
     }
 
     public void broadcastUpdate(ChatMessageResponseDto message) {
         UUID chatContentId = message.getChatContent().getId();
-        messagingTemplate.convertAndSend("/chatContent/" + chatContentId + "/messages",
+        messagingTemplate.convertAndSend("/chat-content/" + chatContentId + "/messages",
                 new ChatMessageNotificationDto(ChatMessageNotificationDto.Action.UPDATE, message));
     }
 
@@ -29,7 +29,7 @@ public class ChatMessageNotifier {
         UUID chatContentId = message.getChatContent().getId();
         ChatMessageResponseDto dummy = new ChatMessageResponseDto();
         dummy.setId(message.getId());
-        messagingTemplate.convertAndSend("/chatContent/" + chatContentId + "/messages",
+        messagingTemplate.convertAndSend("/chat-content/" + chatContentId + "/messages",
                 new ChatMessageNotificationDto(ChatMessageNotificationDto.Action.DELETE, dummy));
     }
 }

@@ -56,16 +56,17 @@ function AddFriendModal({ opened, onClose, w = "40vw" }: AccountSettingsModalPro
                 userAccount1Id: userAccount.id,
                 userAccount2Id: selectedUser.id
             };
-            await createPrivateChat(request);
+            const chat = await createPrivateChat(request);
             notifications.show({
                 title: 'Success!',
-                message: 'A chat with the user has been created.',
+                message: `A chat with ${username} has been created.`,
                 color: 'green',
                 autoClose: 2000,
                 icon: <IconCheck size={20} />,
                 withCloseButton: false
             });
             handleClose();
+            navigate(`/chats/private-chat/${chat.id}`);
         } catch (e: unknown) {
             if (e instanceof Error) {
                 setChatCreationError(e);

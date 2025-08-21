@@ -1,3 +1,4 @@
+import qs from "qs";
 import type { ChatEvent } from "../models/ChatActivity";
 import type { Page, Pageable } from "../models/Paging";
 import api from "./api";
@@ -28,6 +29,10 @@ export const getChatEventsWithFilter = async (
         sort: pageable.sort
     };
 
-    const response = await api.get<Page<ChatEvent>>("/chat-event", { params });
+    const response = await api.get<Page<ChatEvent>>("/chat-event", {
+        params,
+        paramsSerializer: (p) =>
+            qs.stringify(p, { arrayFormat: "repeat" }),
+    });
     return response.data;
 };

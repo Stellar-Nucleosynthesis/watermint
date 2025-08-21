@@ -15,7 +15,7 @@ public class ChatEventNotifier {
 
     public void broadcastCreate(ChatEventResponseDto event) {
         UUID chatContentId = event.getChatContent().getId();
-        messagingTemplate.convertAndSend("/chatContent/" + chatContentId + "/events",
+        messagingTemplate.convertAndSend("/chat-content/" + chatContentId + "/events",
                 new ChatEventNotificationDto(ChatEventNotificationDto.Action.CREATE, event));
     }
 }

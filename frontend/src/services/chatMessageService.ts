@@ -1,3 +1,4 @@
+import qs from "qs";
 import type { ChatMessage, ChatMessageRequestDto } from "../models/ChatActivity";
 import type { Page, Pageable } from "../models/Paging";
 import api from "./api";
@@ -29,7 +30,11 @@ export const getChatMessagesWithFilter = async (
         sort: pageable.sort
     };
 
-    const response = await api.get<Page<ChatMessage>>("/chat-message", { params });
+    const response = await api.get<Page<ChatMessage>>("/chat-message", {
+        params,
+        paramsSerializer: (p) =>
+            qs.stringify(p, { arrayFormat: "repeat" }),
+    });
     return response.data;
 };
 
