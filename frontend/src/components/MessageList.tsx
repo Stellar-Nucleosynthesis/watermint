@@ -9,6 +9,7 @@ import Message from "./Message";
 import ChatEventComponent from "./ChatEvent";
 import type { Pageable } from "../models/Paging";
 import useFetch from "../hooks/useFetch";
+import MessageInputFooter from "./MessageInputFooter";
 
 interface MessageListProps {
     chatContent: ChatContent;
@@ -49,6 +50,7 @@ function MessageList({ chatContent }: MessageListProps) {
     const [page, setPage] = useState(0);
     const [items, setItems] = useState<ChatTimelineItem[]>([]);
     const [hasMore, setHasMore] = useState(true);
+    const [editedMessage, setEditedMessage] = useState<ChatMessage | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const fetchArgs = useMemo<[string, number]>(
@@ -59,7 +61,7 @@ function MessageList({ chatContent }: MessageListProps) {
     const { data, loading } = useFetch(fetchTimelinePage, fetchArgs);
 
     useEffect(() => {
-        if (!data) 
+        if (!data)
             return;
         if (data.length === 0) {
             setHasMore(false);
@@ -93,31 +95,48 @@ function MessageList({ chatContent }: MessageListProps) {
     let lastUserId: string | null = null;
 
     return (
-        <Paper w="100%" h="100%" miw={250} ref={containerRef} style={{ overflowY: "auto" }} radius={0}>
-            <Stack p="sm" gap="xs">
-                {loading && page == 0 && <Loader size="md" mr="auto" ml="auto" />}
+        <>
+            <Paper
+                w="100%"
+                h="100%"
+                miw={250}
+                ref={containerRef}
+                style={{ overflowY: "auto" }}
+                radius={0}
+                bg="aliceblue"
+            >
+                <Stack p="sm" gap="xs">
+                    {loading && page == 0 && <Loader size="md" mr="auto" ml="auto" />}
 
-                {items.map((item) => {
-                    if (item.type === "event") {
-                        return (
-                            <ChatEventComponent key={`evt-${item.id}`} text={item.text} />
-                        );
-                    } else {
-                        const includeAvatar = item.userAccount.id !== lastUserId;
-                        lastUserId = item.userAccount.id;
-                        return (
-                            <Message
-                                key={`msg-${item.id}`}
-                                message={item}
-                                includeAvatar={includeAvatar}
-                            />
-                        );
-                    }
-                })}
+                    {items.map((item) => {
+                        if (item.type === "event") {
+                            return (
+                                <ChatEventComponent key={`evt-${item.id}`} text={item.text} />
+                            );
+                        } else {
+                            const includeAvatar = item.userAccount.id !== lastUserId;
+                            lastUserId = item.userAccount.id;
+                            return (
+                                <Message
+                                    key={`msg-${item.id}`}
+                                    message={item}
+                                    includeAvatar={includeAvatar}
+                                    editMessage={() => setEditedMessage(item)}
+                                />
+                            );
+                        }
+                    })}
 
-                {loading && page > 0 && <Loader size="sm" />}
-            </Stack>
-        </Paper>
+                    {loading && page > 0 && <Loader size="sm" />}
+                </Stack>
+            </Paper>
+
+            <MessageInputFooter
+                chatContent={chatContent}
+                editedMessage={editedMessage}
+                finishEditing={() => setEditedMessage(null)}
+            />
+        </>
     );
 }
 

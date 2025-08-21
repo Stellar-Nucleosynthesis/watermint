@@ -142,7 +142,7 @@ function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModa
                     <Stack gap="sm">
                         <TextInput
                             size="md"
-                            label="Name"
+                            description="Name"
                             placeholder="Name"
                             value={name}
                             onChange={onNameChange}
@@ -157,7 +157,7 @@ function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModa
                 <Divider />
 
                 <TextInput
-                    label="E-mail"
+                    description="E-mail"
                     placeholder="E-mail"
                     leftSection={emailIcon}
                     value={email}
@@ -168,7 +168,7 @@ function AccountSettingsModal({ opened, onClose, w="40vw" }: AccountSettingsModa
                 <DateInput
                     value={birthDate}
                     onChange={onBirthDateChange}
-                    label="Birth date"
+                    description="Birth date"
                     placeholder="Birh date"
                 />
 

@@ -83,7 +83,7 @@ function LogInPanel({ w }: SignUpPanelProps) {
         >
             <Stack>
                 <Title order={1} ta="center">Watermint</Title>
-                <Text size="xl" fw={1000} ta="center" c="grey">
+                <Text size="xl" fw={1000} ta="center" c="grey" mb="xl">
                     Log In
                 </Text>
                 <TextInput
