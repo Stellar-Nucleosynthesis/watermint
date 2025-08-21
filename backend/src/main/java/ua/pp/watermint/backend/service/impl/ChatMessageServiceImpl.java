@@ -14,6 +14,7 @@ import ua.pp.watermint.backend.entity.ChatMessage;
 import ua.pp.watermint.backend.entity.UserAccount;
 import ua.pp.watermint.backend.mapper.request.ChatMessageRequestMapper;
 import ua.pp.watermint.backend.mapper.response.ChatMessageResponseMapper;
+import ua.pp.watermint.backend.notifier.ChatMessageNotifier;
 import ua.pp.watermint.backend.repository.ChatContentRepository;
 import ua.pp.watermint.backend.repository.ChatMessageRepository;
 import ua.pp.watermint.backend.repository.UserAccountRepository;
@@ -33,6 +34,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatMessageResponseMapper chatMessageResponseMapper;
     private final AuthorizationService authorizationService;
     private final ChatContentAccessRegistry accessRegistry;
+    private final ChatMessageNotifier notifier;
 
     @Override
     public ChatMessageResponseDto getById(UUID id) {
@@ -81,8 +83,10 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         UserAccount currentUser = authorizationService.getCurrentUser();
         if(!dto.getUserAccountId().equals(currentUser.getId()))
             throw new AccessDeniedException("Access denied: tried to save a message as another account!");
-        return chatMessageResponseMapper.chatMessageToDto(
+        ChatMessageResponseDto response = chatMessageResponseMapper.chatMessageToDto(
                 chatMessageRepository.save(chatMessageRequestMapper.dtoToChatMessage(dto)));
+        notifier.broadcastCreate(response);
+        return response;
     }
 
     @Override
@@ -95,7 +99,10 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             throw new AccessDeniedException("Access denied: tried to update a message as another account!");
         message.setText(dto.getText());
         message.setWasUpdated(true);
-        return chatMessageResponseMapper.chatMessageToDto(chatMessageRepository.saveAndFlush(message));
+        ChatMessageResponseDto response =  chatMessageResponseMapper.chatMessageToDto(
+                chatMessageRepository.saveAndFlush(message));
+        notifier.broadcastUpdate(response);
+        return response;
     }
 
     @Override
@@ -107,6 +114,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         if(!message.getUserAccount().equals(currentUser))
             throw new AccessDeniedException("Access denied: tried to delete a message as another account!");
         chatMessageRepository.deleteById(id);
+        notifier.broadcastDelete(chatMessageResponseMapper.chatMessageToDto(message));
     }
 
     private void checkChatContentAccess(UUID chatContentId){
