@@ -1,0 +1,52 @@
+name: Release -> Build on Server & Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for workspace only)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deploy to server via SSH and build there
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || '22' }}
+          script: |
+            set -euo pipefail
+            DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
+            REPO_URL="https://github.com/Stellar-Nucleosynthesis/watermint.git"
+            TAG="${{ github.event.release.tag_name }}"
+
+            # If repo not cloned, clone it. If exists, fetch tags.
+            if [ ! -d "$DEPLOY_DIR/.git" ]; then
+              git clone "$REPO_URL" "$DEPLOY_DIR"
+            fi
+
+            cd "$DEPLOY_DIR"
+            git fetch --all --tags --prune
+            git checkout --force "refs/tags/${TAG}"
+
+            # Ensure config files exist (do not overwrite)
+            if [ ! -f "./backend/config.env" ]; then
+              echo "ERROR: backend/config.env not found. Create it with SECURITY_JWT_SECRET and DB settings." >&2
+              exit 2
+            fi
+
+            # Build images locally and bring up
+            docker compose build --parallel
+            docker compose up -d --remove-orphans
+
+            # Prune old images
+            docker image prune -af --filter "until=168h"
+
+            echo "Deployed tag ${TAG} to ${DEPLOY_DIR} successfully."
+
